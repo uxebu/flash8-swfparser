@@ -17,8 +17,8 @@ import org.apache.log4j.Logger;
 public class ASBatchDumper {
 	
 	private static Logger logger = Logger.getLogger(ASBatchDumper.class);
-	private static String swfInputDirectory = "C:\\swf\\input-swf";
-	private static String asOutputDirectory = "C:\\swf\\output-as";
+	private static String swfInputDirectory = "input-swf/";
+	private static String asOutputDirectory = "output-as/";
 	
 	public void start() {
 		
