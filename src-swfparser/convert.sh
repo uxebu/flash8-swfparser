@@ -1,0 +1,1 @@
+java -classpath .:../lib/log4j.jar:../lib/commons-lang-2.2.jar:../src-swfparser/:../lib/spring-core.jar:../lib/spring-context.jar:../lib/spring-beans.jar:../src-jswiff/ org/swfparser/tests/ASBatchDumper
