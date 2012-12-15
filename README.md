@@ -1,4 +1,9 @@
-Java library that allows to extract clean actionscript from swf file
+Java library that allows to parse swf files and re-construct initial actionscript.
+Unlike other projects like Flare swfparser can overcome several obfuscation technics
+used for encrypting swf files. Supported SWF formats: all versions including Flash 8
+and Flash MX 2004. Flash 9 and actionscript 3 is not supported.
+
+Related software: Free: Flare Commercial: Action Script Viewer, Sothink SWF Decompiler
 
 Original source can be found here: http://code.google.com/p/swfparser/
 This project makes the pure sources provided on google code useable.
