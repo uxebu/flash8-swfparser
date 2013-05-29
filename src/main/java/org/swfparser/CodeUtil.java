@@ -17,7 +17,7 @@ public class CodeUtil {
 	private static ApplicationContext appContext = null;
 	
 	private static final String[] SPRING_CONFIGS =  {
-		"classpath*:org/swfparser/spring/*.xml",
+		"classpath*:*.xml",
 	};
 	
 	public static int INDENT = 4;
