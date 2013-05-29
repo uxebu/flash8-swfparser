@@ -20,7 +20,7 @@ import com.jswiff.swfrecords.actions.NullStackValue;
 import com.jswiff.swfrecords.actions.StackValue;
 
 /*
- * ActionEnumerate obtains the names of all “slots” in use in an ActionScript object—that is, for
+ * ActionEnumerate obtains the names of all slots in use in an ActionScript object that is, for
 	an object obj, all names X that could be retrieved with the syntax obj.X. ActionEnumerate is
 	used to implement the for..in statement in ActionScript.
 	ActionEnumerate does the following:

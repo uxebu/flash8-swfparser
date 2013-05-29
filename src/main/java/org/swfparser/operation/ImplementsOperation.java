@@ -24,7 +24,7 @@ import com.jswiff.swfrecords.actions.StackValue;
 	2. Pops the count of implemented interfaces off the stack.
 	3. For each interface count, pops a constructor function off of the stack.
 	The constructor function represents an interface.
-	4. Sets the constructor function’s list of interfaces to the array collected in the previous step,
+	4. Sets the constructor function's list of interfaces to the array collected in the previous step,
 	and sets the count of interfaces to the count popped in step 2.
  * 
  * 
