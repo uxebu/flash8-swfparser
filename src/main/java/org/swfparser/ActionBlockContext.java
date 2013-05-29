@@ -11,6 +11,15 @@
 package org.swfparser;
 
 
+import com.jswiff.swfrecords.ButtonCondAction;
+import com.jswiff.swfrecords.tags.DefineButton2;
+import com.jswiff.swfrecords.tags.DefinitionTag;
+import com.jswiff.swfrecords.tags.TagConstants;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ActionBlockContext extends TagContext {
 		
 		public static final int NO_ACTION_BLOCK_NUM = -1;
@@ -53,31 +62,73 @@ public class ActionBlockContext extends TagContext {
 		private String getDumpString(ActionBlockContext ctx) {
 			
 			StringBuffer buf = new StringBuffer();
-			
-			if (ctx.getParentContext()!=null) {
-				buf
-				.append(getDumpString(ctx.getParentContext()))
-				.append("(");
-			}
-			
-			buf.append("#")
-			.append(ctx.getTagNum())
-			.append(":")
-			.append(ctx.getTag().getCode());
-			
-			// append action block number inside tag
-			if (actionBlockNum != NO_ACTION_BLOCK_NUM) {
-				buf.append(":").append(actionBlockNum);
-			}
-			
-			if (ctx.getParentContext()!=null) {
-				buf.append(")");
-			}
-			
-			return buf.toString();
-			
-		}
-		
 
-		
-	}
+            buf.append("//Tag=")
+               .append(TagConstants.getTagName(ctx.getTag().getCode()))
+               .append("\n");
+
+            if (ctx.getTag() instanceof DefinitionTag)
+            {
+                buf.append("//CharacterId=")
+                        .append(((DefinitionTag) ctx.getTag()).getCharacterId())
+                        .append("\n");
+            }
+
+            if (ctx.getTag() instanceof DefineButton2 && actionBlockNum >= 0)
+            {
+                DefineButton2 defineButton2 = (DefineButton2) ctx.getTag();
+                ButtonCondAction buttonCondAction = defineButton2.getActions()[actionBlockNum];
+
+                printActivatedFlag(buttonCondAction, buf);
+            }
+
+			return buf.toString();
+		}
+
+
+        private void printActivatedFlag(ButtonCondAction buttonAction, StringBuffer buf)
+        {
+            List<String> result = new ArrayList<String>();
+
+            if (buttonAction.isOutDownToIdle())
+            {
+                result.add("isOutDownToIdle");
+            }
+            if (buttonAction.isOutDownToOverDown())
+            {
+                result.add("isOutDownToOverDown");
+            }
+            if (buttonAction.isIdleToOverDown())
+            {
+                result.add("isIdleToOverDown");
+            }
+            if (buttonAction.isOverDownToOutDown())
+            {
+                result.add("isOverDownToOutDown");
+            }
+            if (buttonAction.isOverDownToIdle())
+            {
+                result.add("isOverDownToIdle");
+            }
+            if (buttonAction.isOverUpToOverDown())
+            {
+                result.add("isOverUpToOverDown");
+            }
+            if (buttonAction.isOverDownToOverUp())
+            {
+                result.add("isOverDownToOverUp");
+            }
+            if (buttonAction.isOverUpToIdle())
+            {
+                result.add("isOverUpToIdle");
+            }
+            if (buttonAction.isIdleToOverUp())
+            {
+                result.add("isIdleToOverUp");
+            }
+
+            buf.append("//")
+               .append(StringUtils.join(result, ","))
+               .append("\n");
+        }
+}
