@@ -33,9 +33,16 @@ public class ASBatchDumper {
 		try {
 			for (File file : files) {
 				logger.debug("Reading "+file.getName());
-				
-				writeSWFActionScript(file);
-	            logger.debug("OK!");
+
+                try
+                {
+                    writeSWFActionScript(file);
+                    logger.debug("OK!");
+                }
+                catch (Exception ee)
+                {
+                    ee.printStackTrace();
+                }
 			}
 		} catch (Exception e) {
 			logger.error("#start()",e);
@@ -53,6 +60,16 @@ public class ASBatchDumper {
 	}
 	
 	public static void main(String[] args) {
+        if (System.getProperty("input") != null)
+        {
+            swfInputDirectory = System.getProperty("input");
+        }
+
+        if (System.getProperty("output") != null)
+        {
+            asOutputDirectory = System.getProperty("output");
+        }
+
 		new ASBatchDumper().start();
 	}
 }
