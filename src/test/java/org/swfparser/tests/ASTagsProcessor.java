@@ -38,16 +38,8 @@ public abstract class ASTagsProcessor {
 	private static Logger logger = Logger.getLogger(ASTagsProcessor.class);
 	
 	protected SWFDocument doc;
-//	protected String outputFileName;
 	
-	protected OutputStreamWriter writer;
-	
-	public ASTagsProcessor(SWFDocument doc/*, String fileName*/) {
-		super();
-		this.doc = doc;
-	}
-	
-	public ASTagsProcessor(String swfFileName/*, String outputFileName*/) {
+	public ASTagsProcessor(String swfFileName) {
 		super();
 		try {
 			logger.debug("Reading "+swfFileName);
@@ -61,30 +53,16 @@ public abstract class ASTagsProcessor {
 			throw new RuntimeException(e);
 		}
 	}
-
-	
-	protected abstract void beforeProcess();
-	
-	protected abstract void afterProcess();
-		
 	
 	public void process() {
 		logger.debug("Processing tags...");
 		List<Tag> tags = doc.getTags();
 		try {
-			beforeProcess();
 			ActionBlockContext context = new ActionBlockContext();
 			context.setDocument(doc);
 			processTags(tags, context);
 		} catch (Exception e) {
 			logger.error("Error opening writer ",e);
-		} finally {
-			try {
-				afterProcess();
-			} catch (Exception e) {
-				logger.error("Error closing writer ",e);
-				throw new RuntimeException(e);
-			}
 		}
 	}
 	
