@@ -63,15 +63,15 @@ public class ActionBlockContext extends TagContext {
 			
 			StringBuffer buf = new StringBuffer();
 
-            buf.append("//Tag=")
+            buf.append("   var tag = '")
                .append(TagConstants.getTagName(ctx.getTag().getCode()))
-               .append("\n");
+               .append("';\n");
 
             if (ctx.getTag() instanceof DefinitionTag)
             {
-                buf.append("//CharacterId=")
+                buf.append("   var characterId = ")
                         .append(((DefinitionTag) ctx.getTag()).getCharacterId())
-                        .append("\n");
+                        .append(";\n");
             }
 
             if (ctx.getTag() instanceof DefineButton2 && actionBlockNum >= 0)
@@ -127,8 +127,9 @@ public class ActionBlockContext extends TagContext {
                 result.add("isIdleToOverUp");
             }
 
-            buf.append("//")
-               .append(StringUtils.join(result, ","))
-               .append("\n");
+            for (String flag : result)
+            {
+                buf.append("   var ").append(flag).append(" = true;\n");
+            }
         }
 }
