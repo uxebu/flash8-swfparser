@@ -52,9 +52,7 @@ public class ASBatchDumper {
 	protected void writeSWFActionScript(File swfFile) {
 		String fileNameWithoutExtension = swfFile.getName().substring(0,swfFile.getName().lastIndexOf("."));
 		SWFDumpActionScript swfActionScript = new SWFDumpActionScript(
-				swfFile.getAbsolutePath(),
-				asOutputDirectory+File.separator+fileNameWithoutExtension +".as.dmp"
-			);
+				swfFile.getAbsolutePath());
 		swfActionScript.process();
 		
 	}
