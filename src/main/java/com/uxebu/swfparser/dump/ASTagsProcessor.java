@@ -5,10 +5,9 @@
  *   CVS-ID: $Id: 
  *************************************************************************/
 
-package org.swfparser.tests;
+package com.uxebu.swfparser.dump;
 
 import java.io.FileInputStream;
-import java.io.OutputStreamWriter;
 import java.util.List;
 
 import org.swfparser.ActionBlockContext;
