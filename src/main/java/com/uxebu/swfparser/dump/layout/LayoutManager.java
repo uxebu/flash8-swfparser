@@ -4,22 +4,22 @@ import java.io.File;
 
 public class LayoutManager
 {
-    private String baseDirectory;
+    private String outputDirectory;
 
-    public LayoutManager(String baseDirectory)
+    public LayoutManager(String outputDirectory)
     {
-        this.baseDirectory = baseDirectory;
+        this.outputDirectory = outputDirectory;
     }
 
     public void init()
     {
         for (String directory : new String[]{"buttons", "classes", "sprites"})
         {
-            File outputDirectory = new File(baseDirectory + "/" + directory);
+            File fileOutputDirectory = new File(outputDirectory + "/" + directory);
 
-            if (!outputDirectory.exists())
+            if (!fileOutputDirectory.exists())
             {
-                outputDirectory.mkdirs();
+                fileOutputDirectory.mkdirs();
             }
         }
     }
