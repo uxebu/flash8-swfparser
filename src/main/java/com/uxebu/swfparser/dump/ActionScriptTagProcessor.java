@@ -2,24 +2,12 @@
  *   ASTagsProcessor.java
  * 	 @Author Oleg Gorobets
  *   Created: 16.08.2007
- *   CVS-ID: $Id: 
+ *   CVS-ID: $Id:
  *************************************************************************/
 
 package com.uxebu.swfparser.dump;
 
-import java.io.FileInputStream;
-import java.util.List;
-
-import com.uxebu.swfparser.dump.layout.LayoutManager;
-import org.swfparser.ActionBlockContext;
-import org.swfparser.TagContext;
-
-import org.apache.log4j.Logger;
-
 import com.jswiff.SWFDocument;
-import com.jswiff.SWFReader;
-import com.jswiff.listeners.AllTagDocumentReader;
-import com.jswiff.listeners.SWFDocumentReader;
 import com.jswiff.swfrecords.ButtonCondAction;
 import com.jswiff.swfrecords.ClipActionRecord;
 import com.jswiff.swfrecords.actions.ActionBlockReader;
@@ -32,27 +20,27 @@ import com.jswiff.swfrecords.tags.PlaceObject2;
 import com.jswiff.swfrecords.tags.PlaceObject3;
 import com.jswiff.swfrecords.tags.Tag;
 import com.jswiff.swfrecords.tags.TagConstants;
+import com.uxebu.swfparser.dump.assets.AssetManager;
+import com.uxebu.swfparser.dump.layout.LayoutManager;
+import org.apache.log4j.Logger;
+import org.swfparser.ActionBlockContext;
+import org.swfparser.TagContext;
+
+import java.util.List;
 
 public abstract class ActionScriptTagProcessor
 {
-	
 	private static Logger logger = Logger.getLogger(ActionScriptTagProcessor.class);
-	
+
 	protected SWFDocument doc;
-	
-	public ActionScriptTagProcessor(LayoutManager layoutManager, String swfFileName) {
-		super();
-		try {
-			logger.debug("Reading "+swfFileName);
-			SWFReader reader = new SWFReader(new FileInputStream(swfFileName));
-			SWFDocumentReader docReader = new AllTagDocumentReader();
-			reader.addListener(docReader);
-			reader.read();
-			this.doc = docReader.getDocument();
-		} catch (Exception e) {
-			logger.error("#ActionScriptTagProcessor()",e);
-			throw new RuntimeException(e);
-		}
+    protected LayoutManager layoutManager;
+    protected AssetManager assetManager;
+
+    public ActionScriptTagProcessor(LayoutManager layoutManager, AssetManager assetManager, String fileName) {
+        this.layoutManager = layoutManager;
+        this.assetManager = assetManager;
+
+        this.doc = assetManager.getSWFFile(fileName);
 	}
 
     public void process() {
@@ -66,22 +54,22 @@ public abstract class ActionScriptTagProcessor
 			logger.error("Error opening writer ",e);
 		}
 	}
-	
+
 	public void processTags(List<Tag> tags, ActionBlockContext context) {
-			
+
 //		boolean isRootContext = context.getParentContext() == null;
-		
+
 		context.setTagNum(0);
 		for (Tag tag : tags) {
-			
+
 			context.setTag(tag);
-			
+
 			logger.debug("#");
 			logger.debug("#");
 			logger.debug("# TAG " + tag + " (" + tag.getCode() + ") "+context.getDumpString());
 			logger.debug("#");
 			logger.debug("#");
-			
+
 			try {
 
 				switch (tag.getCode()) {
@@ -142,7 +130,7 @@ public abstract class ActionScriptTagProcessor
 					DoInitAction doInitAction = (DoInitAction) tag;
 					processActions(context, doInitAction.getInitActions());
 					break;
-					
+
 				case TagConstants.DEFINE_SPRITE:
 					DefineSprite sprite = (DefineSprite) tag;
 					List<Tag> controlTags = sprite.getControlTags();
@@ -162,16 +150,16 @@ public abstract class ActionScriptTagProcessor
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
-			
+
 			context.setTagNum(context.getTagNum()+1);
-			
+
 			// tag.
 		} // for
 
 	}
-	
+
 	protected abstract void processActions(ActionBlockContext context, ActionBlockReader actionBlock);
-	
+
 	protected abstract void processNonActionTag(TagContext context);
-	
+
 }

@@ -9,18 +9,27 @@ public class LayoutManager
     public LayoutManager(String outputDirectory)
     {
         this.outputDirectory = outputDirectory;
+
+        init();
     }
 
-    public void init()
+    private void init()
     {
+        createDirectoryIfNotExists(outputDirectory);
+
         for (String directory : new String[]{"buttons", "classes", "sprites"})
         {
-            File fileOutputDirectory = new File(outputDirectory + "/" + directory);
+            createDirectoryIfNotExists(outputDirectory + "/" + directory);
+        }
+    }
 
-            if (!fileOutputDirectory.exists())
-            {
-                fileOutputDirectory.mkdirs();
-            }
+    private void createDirectoryIfNotExists(String directory)
+    {
+        File fileOutputDirectory = new File(directory);
+
+        if (!fileOutputDirectory.exists())
+        {
+            fileOutputDirectory.mkdirs();
         }
     }
 

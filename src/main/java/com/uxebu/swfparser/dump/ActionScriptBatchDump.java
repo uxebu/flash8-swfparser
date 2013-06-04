@@ -1,14 +1,12 @@
 package com.uxebu.swfparser.dump;
 
-import java.io.File;
-
 import com.uxebu.swfparser.dump.assets.AssetManager;
 import com.uxebu.swfparser.dump.layout.LayoutManager;
-import org.apache.log4j.Logger;
+
+import java.io.File;
 
 public class ActionScriptBatchDump
 {
-    private static Logger logger = Logger.getLogger(ActionScriptBatchDump.class);
     private String inputDirectory;
     private String outputDirectory;
 
@@ -42,15 +40,21 @@ public class ActionScriptBatchDump
     {
         AssetManager assetManager = new AssetManager(inputDirectory);
 
-        for (File file : assetManager.getSWFFiles())
+        for (String fileName : assetManager.getSWFFiles())
         {
-            String fileOutputDirectory = outputDirectory + "/" + file.getPath() + "-output";
-            String fileAbsolutePath = file.getAbsolutePath();
+            String fileOutputDirectory = outputDirectory + "/" + fileName + "-output";
 
-            LayoutManager layoutManager = new LayoutManager(fileOutputDirectory);
+            try
+            {
+                LayoutManager layoutManager = new LayoutManager(fileOutputDirectory);
 
-            SWFDumpActionScript swfActionScript = new SWFDumpActionScript(layoutManager, fileAbsolutePath);
-            swfActionScript.process();
+                ActionScriptDump swfActionScript = new ActionScriptDump(layoutManager, assetManager, fileName);
+                swfActionScript.process();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }

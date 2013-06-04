@@ -15,6 +15,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.uxebu.swfparser.dump.assets.AssetManager;
 import com.uxebu.swfparser.dump.layout.LayoutManager;
 import org.apache.log4j.Logger;
 
@@ -28,16 +29,17 @@ import org.swfparser.exception.StatementBlockException;
 import org.swfparser.operation.ByteCodeOperation;
 import com.jswiff.swfrecords.actions.ActionBlockReader;
 
-public class ActionScriptDump extends ASTagsProcessor {
+public class ActionScriptDump extends ActionScriptTagProcessor
+{
 
 	private static Logger logger = Logger.getLogger(ActionScriptDump.class);
 
     private String outputDirectory;
 
-    public ActionScriptDump(LayoutManager layoutManager, String swfFileName) {
-		super(swfFileName);
+    public ActionScriptDump(LayoutManager layoutManager, AssetManager assetManager, String fileName) {
+		super(layoutManager, assetManager, fileName);
 
-        outputDirectory = swfFileName + "-out";
+        outputDirectory = fileName + "-out";
 
         File newDirectory = new File(outputDirectory);
 
