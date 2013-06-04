@@ -31,79 +31,62 @@ import com.jswiff.swfrecords.actions.ActionBlockReader;
 
 public class ActionScriptDump extends ActionScriptTagProcessor
 {
+    private static Logger logger = Logger.getLogger(ActionScriptDump.class);
 
-	private static Logger logger = Logger.getLogger(ActionScriptDump.class);
-
-    private String outputDirectory;
-
-    public ActionScriptDump(LayoutManager layoutManager, AssetManager assetManager, String fileName) {
-		super(layoutManager, assetManager, fileName);
-
-        outputDirectory = fileName + "-out";
-
-        File newDirectory = new File(outputDirectory);
-
-        if (!newDirectory.exists())
-        {
-            newDirectory.mkdirs();
-        }
-	}
+    public ActionScriptDump(LayoutManager layoutManager, AssetManager assetManager, String fileName)
+    {
+        super(layoutManager, assetManager, fileName);
+    }
 
     @Override
-	protected void processActions(ActionBlockContext context, ActionBlockReader actionBlock) {
-		StatementBlock statementBlock = CodeUtil.getStatementBlockReader();
-		ExecutionContext executionContext = CodeUtil.getExecutionContext();
-		executionContext.setTag(context.getTag());
-		executionContext.setFrameNumber(context.getFrameNum());
-		statementBlock.setExecutionContext(executionContext);
-		List<Operation> operations;
-		try {
-			statementBlock.read(actionBlock.getActions());
-			operations = statementBlock.getOperations();
-		} catch (StatementBlockException e) {
-			logger.error("Error reading action block.", e);
-			operations = new ArrayList<Operation>();
-			operations.add(new ByteCodeOperation(actionBlock.getData()));
-		}
+    protected void processActions(ActionBlockContext context, ActionBlockReader actionBlock)
+    {
+        StatementBlock statementBlock = CodeUtil.getStatementBlockReader();
+        ExecutionContext executionContext = CodeUtil.getExecutionContext();
+        executionContext.setTag(context.getTag());
+        executionContext.setFrameNumber(context.getFrameNum());
+        statementBlock.setExecutionContext(executionContext);
+        List<Operation> operations;
+        try
+        {
+            statementBlock.read(actionBlock.getActions());
+            operations = statementBlock.getOperations();
+        }
+        catch (StatementBlockException e)
+        {
+            logger.error("Error reading action block.", e);
+            operations = new ArrayList<Operation>();
+            operations.add(new ByteCodeOperation(actionBlock.getData()));
+        }
 
-		processOperations(context, operations);
-	}
+        processOperations(context, operations);
+    }
 
-	protected void processOperations(ActionBlockContext context, List<Operation> operations) {
-		try {
-            FileOutputStream fileOutputStream = new FileOutputStream(outputDirectory + "/frame-" + context.getFrameNum() + ".js");
+    protected void processOperations(ActionBlockContext context, List<Operation> operations)
+    {
+        StringBuffer block = new StringBuffer();
+        block.append("(function() {\n");
 
-            Writer writer = new OutputStreamWriter(fileOutputStream, "UTF-8");
+        block.append(context.getDumpString());
+        block.append("\n");
 
-			// write header
-            writer.write("(function() {\n");
+        block.append("   return function() {\n");
 
-            writer.write(context.getDumpString());
-            writer.write("\n");
+        for (Operation op : operations)
+        {
+            String endOfStatement = CodeUtil.endOfStatement(op);
+            String writeOp = op.getStringValue(0) + endOfStatement + "\n";
+            block.append("      " + writeOp);
+        }
 
-            writer.write("   return function() {\n");
+        block.append("   };\n");
+        block.append("})();\n");
 
-			for (Operation op : operations) {
-				String endOfStatement = CodeUtil.endOfStatement(op);
-				String writeOp = op.getStringValue(0) + endOfStatement + "\n";
-                writer.write("      " + writeOp);
-			}
+        layoutManager.addSprite("sprite-"+context.getFrameNum()+".js", block.toString());
+    }
 
-            writer.write("   };\n");
-            writer.write("})();\n");
-
-            writer.close();
-            fileOutputStream.close();
-
-		} catch (IOException e) {
-			logger.error("Error writing data ", e);
-		}
-	}
-
-	@Override
-	protected void processNonActionTag(TagContext context) {
-		// TODO Auto-generated method stub
-		
-	}
-
+    @Override
+    protected void processNonActionTag(TagContext context)
+    {
+    }
 }
