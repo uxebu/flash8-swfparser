@@ -10,6 +10,7 @@ package com.uxebu.swfparser.dump;
 import java.io.FileInputStream;
 import java.util.List;
 
+import com.uxebu.swfparser.dump.layout.LayoutManager;
 import org.swfparser.ActionBlockContext;
 import org.swfparser.TagContext;
 
@@ -32,13 +33,14 @@ import com.jswiff.swfrecords.tags.PlaceObject3;
 import com.jswiff.swfrecords.tags.Tag;
 import com.jswiff.swfrecords.tags.TagConstants;
 
-public abstract class ASTagsProcessor {
+public abstract class ActionScriptTagProcessor
+{
 	
-	private static Logger logger = Logger.getLogger(ASTagsProcessor.class);
+	private static Logger logger = Logger.getLogger(ActionScriptTagProcessor.class);
 	
 	protected SWFDocument doc;
 	
-	public ASTagsProcessor(String swfFileName) {
+	public ActionScriptTagProcessor(LayoutManager layoutManager, String swfFileName) {
 		super();
 		try {
 			logger.debug("Reading "+swfFileName);
@@ -48,12 +50,12 @@ public abstract class ASTagsProcessor {
 			reader.read();
 			this.doc = docReader.getDocument();
 		} catch (Exception e) {
-			logger.error("#ASTagsProcessor()",e);
+			logger.error("#ActionScriptTagProcessor()",e);
 			throw new RuntimeException(e);
 		}
 	}
-	
-	public void process() {
+
+    public void process() {
 		logger.debug("Processing tags...");
 		List<Tag> tags = doc.getTags();
 		try {

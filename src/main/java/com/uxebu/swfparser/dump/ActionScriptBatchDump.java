@@ -6,13 +6,13 @@ import com.uxebu.swfparser.dump.assets.AssetManager;
 import com.uxebu.swfparser.dump.layout.LayoutManager;
 import org.apache.log4j.Logger;
 
-public class ASBatchDumper
+public class ActionScriptBatchDump
 {
-    private static Logger logger = Logger.getLogger(ASBatchDumper.class);
+    private static Logger logger = Logger.getLogger(ActionScriptBatchDump.class);
     private String inputDirectory;
     private String outputDirectory;
 
-    public ASBatchDumper(String inputDirectory, String outputDirectory)
+    public ActionScriptBatchDump(String inputDirectory, String outputDirectory)
     {
         this.inputDirectory = inputDirectory;
         this.outputDirectory = outputDirectory;
@@ -23,7 +23,7 @@ public class ASBatchDumper
         String inputDirectory = getPropertyIfDefined("input", "swf");
         String outputDirectory = getPropertyIfDefined("output", "as2");
 
-        new ASBatchDumper(inputDirectory, outputDirectory).start();
+        new ActionScriptBatchDump(inputDirectory, outputDirectory).start();
     }
 
     private static String getPropertyIfDefined(String propertyName, String defaultValue)
@@ -40,30 +40,17 @@ public class ASBatchDumper
 
     public void start()
     {
-        logger.debug("Looking " + inputDirectory + " for SWF's");
-
-        LayoutManager layoutManager = new LayoutManager(outputDirectory);
-        layoutManager.init();
-
         AssetManager assetManager = new AssetManager(inputDirectory);
 
-        for (File swfFile : assetManager.getSWFFiles())
+        for (File file : assetManager.getSWFFiles())
         {
-            logger.debug("Reading " + swfFile.getName());
+            String fileOutputDirectory = outputDirectory + "/" + file.getPath() + "-output";
+            String fileAbsolutePath = file.getAbsolutePath();
 
-            try
-            {
-                String swfFileAbsolutePath = swfFile.getAbsolutePath();
+            LayoutManager layoutManager = new LayoutManager(fileOutputDirectory);
 
-                SWFDumpActionScript swfActionScript = new SWFDumpActionScript(swfFileAbsolutePath);
-                swfActionScript.process();
-
-                logger.debug("OK!");
-            }
-            catch (Exception ee)
-            {
-                ee.printStackTrace();
-            }
+            SWFDumpActionScript swfActionScript = new SWFDumpActionScript(layoutManager, fileAbsolutePath);
+            swfActionScript.process();
         }
     }
 }

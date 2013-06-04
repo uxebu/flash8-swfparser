@@ -15,6 +15,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.uxebu.swfparser.dump.layout.LayoutManager;
 import org.apache.log4j.Logger;
 
 import org.swfparser.ActionBlockContext;
@@ -27,13 +28,13 @@ import org.swfparser.exception.StatementBlockException;
 import org.swfparser.operation.ByteCodeOperation;
 import com.jswiff.swfrecords.actions.ActionBlockReader;
 
-public class SWFDumpActionScript extends ASTagsProcessor {
+public class ActionScriptDump extends ASTagsProcessor {
 
-	private static Logger logger = Logger.getLogger(SWFDumpActionScript.class);
+	private static Logger logger = Logger.getLogger(ActionScriptDump.class);
 
     private String outputDirectory;
 
-    public SWFDumpActionScript(String swfFileName) {
+    public ActionScriptDump(LayoutManager layoutManager, String swfFileName) {
 		super(swfFileName);
 
         outputDirectory = swfFileName + "-out";
@@ -46,7 +47,7 @@ public class SWFDumpActionScript extends ASTagsProcessor {
         }
 	}
 
-	@Override
+    @Override
 	protected void processActions(ActionBlockContext context, ActionBlockReader actionBlock) {
 		StatementBlock statementBlock = CodeUtil.getStatementBlockReader();
 		ExecutionContext executionContext = CodeUtil.getExecutionContext();
