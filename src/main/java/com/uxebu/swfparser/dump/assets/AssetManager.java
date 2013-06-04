@@ -36,7 +36,7 @@ public class AssetManager
 
         for (File file : files)
         {
-            fileNames.add(file.getPath());
+            fileNames.add(file.getName());
         }
 
         return fileNames;
@@ -48,7 +48,7 @@ public class AssetManager
         {
             logger.debug("Reading " + fileName);
 
-            SWFReader reader = new SWFReader(new FileInputStream(fileName));
+            SWFReader reader = new SWFReader(new FileInputStream(inputDirectory + "/" + fileName));
             SWFDocumentReader docReader = new AllTagDocumentReader();
             reader.addListener(docReader);
             reader.read();
