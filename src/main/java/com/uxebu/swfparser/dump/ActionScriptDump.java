@@ -7,40 +7,189 @@
 
 package com.uxebu.swfparser.dump;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.ArrayList;
+import com.jswiff.SWFDocument;
+import com.jswiff.swfrecords.tags.DefineButton2;
+import com.jswiff.swfrecords.tags.DefineSprite;
+import com.jswiff.swfrecords.tags.DoAction;
+import com.jswiff.swfrecords.tags.DoInitAction;
+import com.jswiff.swfrecords.tags.ShowFrame;
+import com.jswiff.swfrecords.tags.Tag;
+import com.uxebu.swfparser.dump.assets.AssetManager;
+import com.uxebu.swfparser.dump.generators.CodeGenerator;
+import com.uxebu.swfparser.dump.generators.DefineButton2Generator;
+import com.uxebu.swfparser.dump.generators.DoInitActionGenerator;import com.uxebu.swfparser.dump.layout.LayoutManager;
+import org.apache.log4j.Logger;
+import org.swfparser.ActionBlockContext;
+
 import java.util.List;
 
-import com.jswiff.swfrecords.tags.DefineSprite;
-import com.jswiff.swfrecords.tags.DefinitionTag;
-import com.uxebu.swfparser.dump.assets.AssetManager;
-import com.uxebu.swfparser.dump.layout.LayoutManager;
-import org.apache.log4j.Logger;
-
-import org.swfparser.ActionBlockContext;
-import org.swfparser.CodeUtil;
-import org.swfparser.ExecutionContext;
-import org.swfparser.Operation;
-import org.swfparser.StatementBlock;
-import org.swfparser.TagContext;
-import org.swfparser.exception.StatementBlockException;
-import org.swfparser.operation.ByteCodeOperation;
-import com.jswiff.swfrecords.actions.ActionBlockReader;
-
-public class ActionScriptDump extends ActionScriptTagProcessor
+public class ActionScriptDump
 {
     private static Logger logger = Logger.getLogger(ActionScriptDump.class);
+    protected SWFDocument doc;
+    protected LayoutManager layoutManager;
+    protected AssetManager assetManager;
 
     public ActionScriptDump(LayoutManager layoutManager, AssetManager assetManager, String fileName)
     {
-        super(layoutManager, assetManager, fileName);
+        this.layoutManager = layoutManager;
+        this.assetManager = assetManager;
+
+        this.doc = assetManager.getSWFFile(fileName);
     }
 
-    @Override
+    public void process()
+    {
+        List<Tag> tags = doc.getTags();
+        ActionBlockContext context = new ActionBlockContext(layoutManager);
+        context.setDocument(doc);
+        processTags(context, tags);
+    }
+
+    public void processTags(ActionBlockContext context, List<Tag> tags)
+    {
+        context.setTagNum(0);
+
+        for (Tag tag : tags)
+        {
+
+            /*
+
+			try {
+
+				switch (tag.getCode()) {
+
+				case TagConstants.SHOW_FRAME:
+					context.setFrameNum(context.getFrameNum()+1);
+					break;
+
+				case TagConstants.PLACE_OBJECT_2:
+					PlaceObject2 placeObject2 = (PlaceObject2) tag;
+					if (placeObject2.getClipActions() != null) {
+						List<ClipActionRecord> actionRecords = placeObject2.getClipActions().getClipActionRecords();
+						context.setActionBlockNum(0);
+						for (ClipActionRecord record : actionRecords) {
+							processActions(context, record.getActions());
+							context.setActionBlockNum(context.getActionBlockNum()+1);
+						}
+						context.setActionBlockNum(ActionBlockContext.NO_ACTION_BLOCK_NUM);
+					}
+					break;
+
+				case TagConstants.PLACE_OBJECT_3:
+					PlaceObject3 placeObject3 = (PlaceObject3) tag;
+					if (placeObject3.getClipActions() != null) {
+						List<ClipActionRecord> actionRecords = placeObject3.getClipActions().getClipActionRecords();
+						context.setActionBlockNum(0);
+						for (ClipActionRecord record : actionRecords) {
+							processActions(context, record.getActions());
+							context.setActionBlockNum(context.getActionBlockNum()+1);
+						}
+						context.setActionBlockNum(ActionBlockContext.NO_ACTION_BLOCK_NUM);
+					}
+					break;
+
+				case TagConstants.DEFINE_BUTTON:
+					DefineButton defineButton = (DefineButton) tag;
+					processActions(context, defineButton.getActions());
+					break;
+
+				case TagConstants.DEFINE_BUTTON_2:
+					DefineButton2 defineButton2 = (DefineButton2) tag;
+					ButtonCondAction[] buttonActions = defineButton2.getActions();
+					context.setActionBlockNum(0);
+					if (buttonActions != null) {
+						for (ButtonCondAction buttonAction : buttonActions) {
+							processActions(context, buttonAction.getActions());
+							context.setActionBlockNum(context.getActionBlockNum()+1);
+						}
+					}
+					context.setActionBlockNum(ActionBlockContext.NO_ACTION_BLOCK_NUM);
+					break;
+
+				case TagConstants.DO_ACTION:
+					DoAction doAction = (DoAction) tag;
+					processActions(context, doAction.getActions());
+					break;
+				case TagConstants.DO_INIT_ACTION:
+					DoInitAction doInitAction = (DoInitAction) tag;
+					processActions(context, doInitAction.getInitActions());
+					break;
+
+				case TagConstants.DEFINE_SPRITE:
+					DefineSprite sprite = (DefineSprite) tag;
+					List<Tag> controlTags = sprite.getControlTags();
+					ActionBlockContext newContext = new ActionBlockContext();
+					newContext.setParentContext(context);
+					newContext.setFrameNum(context.getFrameNum());
+					newContext.setDocument(context.getDocument());
+					processTags(controlTags, newContext);
+					break;
+
+				default:
+					// do nothing proceed to next tag
+					processNonActionTag(context);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+			*/
+
+            context.setTag(tag);
+
+            generateShowFrame(context);
+            generateDefineButton2(context);
+            generateDoAction(context);
+
+            if (context.getTag() instanceof DefineSprite)
+            {
+                DefineSprite defineSprite = (DefineSprite) context.getTag();
+
+                List<Tag> controlTags = defineSprite.getControlTags();
+                ActionBlockContext newContext = new ActionBlockContext(layoutManager);
+                newContext.setParentContext(context);
+                newContext.setFrameNum(context.getFrameNum());
+                newContext.setDocument(context.getDocument());
+                processTags(newContext, controlTags);
+            }
+
+            context.setTagNum(context.getTagNum() + 1);
+
+            // tag.
+        } // for
+
+    }
+
+    private void generateShowFrame(ActionBlockContext context)
+    {
+        if (context.getTag() instanceof ShowFrame)
+        {
+            context.setFrameNum(context.getFrameNum()+1);
+        }
+    }
+
+    private void generateDoAction(ActionBlockContext context)
+    {
+        if (context.getTag() instanceof DoAction)
+        {
+            CodeGenerator generator = new DoInitActionGenerator(layoutManager);
+            generator.generate(context);
+        }
+
+    }
+
+    private void generateDefineButton2(ActionBlockContext context)
+    {
+        if (context.getTag() instanceof DefineButton2)
+        {
+            CodeGenerator generator = new DefineButton2Generator(layoutManager);
+            generator.generate(context);
+        }
+    }
+
+    /*
     protected void processActions(ActionBlockContext context, ActionBlockReader actionBlock)
     {
         StatementBlock statementBlock = CodeUtil.getStatementBlockReader();
@@ -84,12 +233,6 @@ public class ActionScriptDump extends ActionScriptTagProcessor
         block.append("   };\n");
         block.append("})();\n");
 
-        if (context.getTag() instanceof DefinitionTag)
-        {
-            int characterId = ((DefinitionTag) context.getTag()).getCharacterId();
-            layoutManager.addButton(characterId, block.toString());
-        }
-
         if (context.getParentContext() != null && operations.size() > 0)
         {
             if (context.getParentContext().getTag() instanceof DefineSprite)
@@ -103,5 +246,5 @@ public class ActionScriptDump extends ActionScriptTagProcessor
     @Override
     protected void processNonActionTag(TagContext context)
     {
-    }
+    }       */
 }

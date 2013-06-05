@@ -20,39 +20,31 @@ public class ButtonCondActionFlagMapper
 
         if (buttonAction.isOutDownToIdle())
         {
-            flags.add(Flag.isOutDownToIdle);
+            flags.add(Flag.releaseOutside);
         }
-        if (buttonAction.isOutDownToOverDown())
+        if (buttonAction.isOutDownToOverDown() || buttonAction.isIdleToOverDown())
         {
-            flags.add(Flag.isOutDownToOverDown);
+            flags.add(Flag.dragOver);
         }
-        if (buttonAction.isIdleToOverDown())
+        if (buttonAction.isOverDownToOutDown() || buttonAction.isOverDownToIdle())
         {
-            flags.add(Flag.isIdleToOverDown);
-        }
-        if (buttonAction.isOverDownToOutDown())
-        {
-            flags.add(Flag.isOverDownToOutDown);
-        }
-        if (buttonAction.isOverDownToIdle())
-        {
-            flags.add(Flag.isOverDownToIdle);
+            flags.add(Flag.dragOut);
         }
         if (buttonAction.isOverUpToOverDown())
         {
-            flags.add(Flag.isOverUpToOverDown);
+            flags.add(Flag.press);
         }
         if (buttonAction.isOverDownToOverUp())
         {
-            flags.add(Flag.isOverDownToOverUp);
+            flags.add(Flag.release);
         }
         if (buttonAction.isOverUpToIdle())
         {
-            flags.add(Flag.isOverUpToIdle);
+            flags.add(Flag.rollOut);
         }
         if (buttonAction.isIdleToOverUp())
         {
-            flags.add(Flag.isIdleToOverUp);
+            flags.add(Flag.rollOver);
         }
 
         return flags;
