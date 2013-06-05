@@ -15,6 +15,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jswiff.swfrecords.tags.DefineSprite;
+import com.jswiff.swfrecords.tags.DefinitionTag;
 import com.uxebu.swfparser.dump.assets.AssetManager;
 import com.uxebu.swfparser.dump.layout.LayoutManager;
 import org.apache.log4j.Logger;
@@ -82,7 +84,20 @@ public class ActionScriptDump extends ActionScriptTagProcessor
         block.append("   };\n");
         block.append("})();\n");
 
-        layoutManager.addSprite("sprite-"+context.getFrameNum()+".js", block.toString());
+        if (context.getTag() instanceof DefinitionTag)
+        {
+            int characterId = ((DefinitionTag) context.getTag()).getCharacterId();
+            layoutManager.addButton(characterId, block.toString());
+        }
+
+        if (context.getParentContext() != null && operations.size() > 0)
+        {
+            if (context.getParentContext().getTag() instanceof DefineSprite)
+            {
+                int characterId = ((DefineSprite) context.getParentContext().getTag()).getCharacterId();
+                layoutManager.addSprite(characterId, context.getFrameNum(), block.toString());
+            }
+        }
     }
 
     @Override

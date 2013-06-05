@@ -34,16 +34,16 @@ public class LayoutManager
         }
     }
 
-    public void addButton(String fileName, String content)
+    public void addButton(int characterId, String content)
     {
-
+        dumpFile(outputDirectory + "/buttons/button-" + characterId + ".js", content);
     }
 
-    public void addSprite(String fileName, String content)
+    private void dumpFile(String fileName, String content)
     {
         try
         {
-            FileOutputStream spriteFile = new FileOutputStream(outputDirectory + "/sprites/" + fileName);
+            FileOutputStream spriteFile = new FileOutputStream(fileName);
             spriteFile.write(content.getBytes());
             spriteFile.flush();
             spriteFile.close();
@@ -51,8 +51,13 @@ public class LayoutManager
         catch (Exception e)
         {
             e.printStackTrace();
-            throw new RuntimeException("Error creating spring file " + fileName);
+            throw new RuntimeException("Error creating file " + fileName);
         }
+    }
+
+    public void addSprite(int characterId, int frameNumber, String content)
+    {
+        dumpFile(outputDirectory + "/sprites/sprite-" + characterId + "-" + frameNumber + ".js", content);
     }
 
     public void addClass(String fileName, String content)

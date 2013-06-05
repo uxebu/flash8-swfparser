@@ -46,8 +46,6 @@ public class AssetManager
     {
         try
         {
-            logger.debug("Reading " + fileName);
-
             SWFReader reader = new SWFReader(new FileInputStream(inputDirectory + "/" + fileName));
             SWFDocumentReader docReader = new AllTagDocumentReader();
             reader.addListener(docReader);
@@ -57,8 +55,7 @@ public class AssetManager
         }
         catch (Exception e)
         {
-            logger.error("#ActionScriptTagProcessor()", e);
-
+            logger.error("Error reading swf file", e);
             throw new RuntimeException(e);
         }
     }
