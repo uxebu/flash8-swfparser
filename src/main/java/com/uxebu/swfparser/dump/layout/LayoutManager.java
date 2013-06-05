@@ -1,5 +1,7 @@
 package com.uxebu.swfparser.dump.layout;
 
+import com.uxebu.swfparser.dump.actions.Flag;
+
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -34,9 +36,9 @@ public class LayoutManager
         }
     }
 
-    public void addButton(int characterId, String content)
+    public void addButton(int characterId, Flag flag, String content)
     {
-        dumpFile(outputDirectory + "/buttons/button-" + characterId + ".js", content);
+        dumpFile(outputDirectory + "/buttons/button-" + characterId + "-" + flag + ".js", content);
     }
 
     private void dumpFile(String fileName, String content)
