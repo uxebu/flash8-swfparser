@@ -15,6 +15,8 @@ import com.jswiff.swfrecords.ButtonCondAction;
 import com.jswiff.swfrecords.tags.DefineButton2;
 import com.jswiff.swfrecords.tags.DefinitionTag;
 import com.jswiff.swfrecords.tags.TagConstants;
+import com.uxebu.swfparser.dump.actions.ButtonCondActionFlagMapper;
+import com.uxebu.swfparser.dump.actions.Flag;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
@@ -85,51 +87,13 @@ public class ActionBlockContext extends TagContext {
 			return buf.toString();
 		}
 
-
         private void printActivatedFlag(ButtonCondAction buttonAction, StringBuffer buf)
         {
-            List<String> result = new ArrayList<String>();
+            ButtonCondActionFlagMapper mapper = new ButtonCondActionFlagMapper(buttonAction);
 
-            if (buttonAction.isOutDownToIdle())
+            for (Flag flag : mapper.map())
             {
-                result.add("isOutDownToIdle");
-            }
-            if (buttonAction.isOutDownToOverDown())
-            {
-                result.add("isOutDownToOverDown");
-            }
-            if (buttonAction.isIdleToOverDown())
-            {
-                result.add("isIdleToOverDown");
-            }
-            if (buttonAction.isOverDownToOutDown())
-            {
-                result.add("isOverDownToOutDown");
-            }
-            if (buttonAction.isOverDownToIdle())
-            {
-                result.add("isOverDownToIdle");
-            }
-            if (buttonAction.isOverUpToOverDown())
-            {
-                result.add("isOverUpToOverDown");
-            }
-            if (buttonAction.isOverDownToOverUp())
-            {
-                result.add("isOverDownToOverUp");
-            }
-            if (buttonAction.isOverUpToIdle())
-            {
-                result.add("isOverUpToIdle");
-            }
-            if (buttonAction.isIdleToOverUp())
-            {
-                result.add("isIdleToOverUp");
-            }
-
-            for (String flag : result)
-            {
-                buf.append("   var ").append(flag).append(" = true;\n");
+                 buf.append("   var ").append(flag).append(" = true;\n");
             }
         }
 }
