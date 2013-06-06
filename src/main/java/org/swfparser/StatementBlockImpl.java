@@ -283,7 +283,7 @@ public class StatementBlockImpl implements StatementBlock {
 			logger.debug("~~~~~ Writing UNFINISHED BLOCK statements ~~~");
 			for (Operation op : statements) {
 				String endOfStatement = CodeUtil.endOfStatement(op);
-				System.out.println(op.getStringValue(0)+endOfStatement+" // "+op+"\n");
+				logger.debug(op.getStringValue(0)+endOfStatement+" // "+op+"\n");
 			}
 			
 			try {
@@ -313,7 +313,7 @@ public class StatementBlockImpl implements StatementBlock {
 			logger.debug("~~~~~ Writing UNFINISHED BLOCK statements ~~~");
 			for (Operation op : statements) {
 				String endOfStatement = CodeUtil.endOfStatement(op);
-				System.out.println(op.getStringValue(0)+endOfStatement+" // "+op.getClass().getName()+"\n");
+                logger.debug(op.getStringValue(0)+endOfStatement+" // "+op.getClass().getName()+"\n");
 			}
 			
 			throw new StatementBlockException(e);
@@ -326,7 +326,7 @@ public class StatementBlockImpl implements StatementBlock {
 			logger.debug("~~~~~ Writing statements ~~~");
 			for (Operation op : statements) {
 				String endOfStatement = CodeUtil.endOfStatement(op);
-				System.out.println(op.getStringValue(0)+endOfStatement+" // "+op.getClass().getName()+"\n");
+                logger.debug(op.getStringValue(0)+endOfStatement+" // "+op.getClass().getName()+"\n");
 			}
 		}
 		
