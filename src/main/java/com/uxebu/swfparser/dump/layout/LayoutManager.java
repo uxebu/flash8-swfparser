@@ -1,6 +1,7 @@
 package com.uxebu.swfparser.dump.layout;
 
 import com.uxebu.swfparser.dump.actions.ButtonCondActionFlag;
+import com.uxebu.swfparser.dump.actions.ClipActionFlag;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,7 +21,7 @@ public class LayoutManager
     {
         createDirectoryIfNotExists(outputDirectory);
 
-        for (String directory : new String[]{"button", "initclip", "sprite"})
+        for (String directory : new String[]{"rootMovie", "button", "initClip", "sprite"})
         {
             createDirectoryIfNotExists(outputDirectory + "/" + directory);
         }
@@ -64,11 +65,21 @@ public class LayoutManager
 
     public void addInitClip(int spriteId, String content)
     {
-        dumpFile(outputDirectory + "/initclip/initclip-" + spriteId + ".js", content);
+        dumpFile(outputDirectory + "/initClip/initClip-" + spriteId + ".js", content);
     }
 
     public void addRootMovie(int frameNumber, String content)
     {
-        dumpFile(outputDirectory + "/rootMovie-" + frameNumber + ".js", content);
+        dumpFile(outputDirectory + "/rootMovie/rootMovie-" + frameNumber + ".js", content);
+    }
+
+    public void addSpriteClipAction(int spriteCharacterId, int clipActionCharacterId, ClipActionFlag flag, String content)
+    {
+        dumpFile(outputDirectory + "/sprite/sprite-" + spriteCharacterId + "-clipAction-" + clipActionCharacterId + "-" + flag + ".js", content);
+    }
+
+    public void addRootMovieClipAction(int characterId, ClipActionFlag flag, String content)
+    {
+        dumpFile(outputDirectory + "/rootMovie/rootMovie-clipAction-" + characterId + "-" + flag + ".js", content);
     }
 }
