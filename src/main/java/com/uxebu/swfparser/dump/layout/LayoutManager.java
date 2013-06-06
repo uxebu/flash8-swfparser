@@ -1,6 +1,6 @@
 package com.uxebu.swfparser.dump.layout;
 
-import com.uxebu.swfparser.dump.actions.Flag;
+import com.uxebu.swfparser.dump.actions.ButtonCondActionFlag;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,9 +36,9 @@ public class LayoutManager
         }
     }
 
-    public void addButton(int characterId, Flag flag, String content)
+    public void addButton(int characterId, ButtonCondActionFlag buttonCondActionFlag, String content)
     {
-        dumpFile(outputDirectory + "/button/button-" + characterId + "-" + flag + ".js", content);
+        dumpFile(outputDirectory + "/button/button-" + characterId + "-" + buttonCondActionFlag + ".js", content);
     }
 
     private void dumpFile(String fileName, String content)

@@ -14,39 +14,39 @@ public class ButtonCondActionFlagMapper
         this.buttonAction = buttonAction;
     }
 
-    public List<Flag> map()
+    public List<ButtonCondActionFlag> map()
     {
-        List<Flag> flags = new ArrayList<Flag>();
+        List<ButtonCondActionFlag> buttonCondActionFlags = new ArrayList<ButtonCondActionFlag>();
 
         if (buttonAction.isOutDownToIdle())
         {
-            flags.add(Flag.releaseOutside);
+            buttonCondActionFlags.add(ButtonCondActionFlag.releaseOutside);
         }
         if (buttonAction.isOutDownToOverDown() || buttonAction.isIdleToOverDown())
         {
-            flags.add(Flag.dragOver);
+            buttonCondActionFlags.add(ButtonCondActionFlag.dragOver);
         }
         if (buttonAction.isOverDownToOutDown() || buttonAction.isOverDownToIdle())
         {
-            flags.add(Flag.dragOut);
+            buttonCondActionFlags.add(ButtonCondActionFlag.dragOut);
         }
         if (buttonAction.isOverUpToOverDown())
         {
-            flags.add(Flag.press);
+            buttonCondActionFlags.add(ButtonCondActionFlag.press);
         }
         if (buttonAction.isOverDownToOverUp())
         {
-            flags.add(Flag.release);
+            buttonCondActionFlags.add(ButtonCondActionFlag.release);
         }
         if (buttonAction.isOverUpToIdle())
         {
-            flags.add(Flag.rollOut);
+            buttonCondActionFlags.add(ButtonCondActionFlag.rollOut);
         }
         if (buttonAction.isIdleToOverUp())
         {
-            flags.add(Flag.rollOver);
+            buttonCondActionFlags.add(ButtonCondActionFlag.rollOver);
         }
 
-        return flags;
+        return buttonCondActionFlags;
     }
 }

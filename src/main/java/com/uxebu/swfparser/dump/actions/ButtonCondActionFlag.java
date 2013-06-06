@@ -1,6 +1,6 @@
 package com.uxebu.swfparser.dump.actions;
 
-public enum Flag
+public enum ButtonCondActionFlag
 {
     releaseOutside,
     dragOver,

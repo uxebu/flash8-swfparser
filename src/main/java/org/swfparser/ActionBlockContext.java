@@ -17,12 +17,8 @@ import com.jswiff.swfrecords.tags.DefineSprite;
 import com.jswiff.swfrecords.tags.DefinitionTag;
 import com.jswiff.swfrecords.tags.TagConstants;
 import com.uxebu.swfparser.dump.actions.ButtonCondActionFlagMapper;
-import com.uxebu.swfparser.dump.actions.Flag;
+import com.uxebu.swfparser.dump.actions.ButtonCondActionFlag;
 import com.uxebu.swfparser.dump.layout.LayoutManager;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ActionBlockContext extends TagContext
 {
@@ -116,9 +112,9 @@ public class ActionBlockContext extends TagContext
     {
         ButtonCondActionFlagMapper mapper = new ButtonCondActionFlagMapper(buttonAction);
 
-        for (Flag flag : mapper.map())
+        for (ButtonCondActionFlag buttonCondActionFlag : mapper.map())
         {
-            buf.append("   var action = '").append(flag).append("';\n");
+            buf.append("   var action = '").append(buttonCondActionFlag).append("';\n");
         }
     }
 }

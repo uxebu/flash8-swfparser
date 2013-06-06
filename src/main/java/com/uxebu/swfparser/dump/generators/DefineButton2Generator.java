@@ -3,8 +3,8 @@ package com.uxebu.swfparser.dump.generators;
 import com.jswiff.swfrecords.ButtonCondAction;
 import com.jswiff.swfrecords.actions.ActionBlockReader;
 import com.jswiff.swfrecords.tags.DefineButton2;
+import com.uxebu.swfparser.dump.actions.ButtonCondActionFlag;
 import com.uxebu.swfparser.dump.actions.ButtonCondActionFlagMapper;
-import com.uxebu.swfparser.dump.actions.Flag;
 import com.uxebu.swfparser.dump.layout.LayoutManager;
 import org.swfparser.ActionBlockContext;
 import org.swfparser.CodeUtil;
@@ -83,9 +83,9 @@ public class DefineButton2Generator implements CodeGenerator
         ButtonCondAction buttonCondAction = defineButton2.getActions()[actionBlockNumber];
         ButtonCondActionFlagMapper mapper = new ButtonCondActionFlagMapper(buttonCondAction);
 
-        for (Flag flag : mapper.map())
+        for (ButtonCondActionFlag buttonCondActionFlag : mapper.map())
         {
-            layoutManager.addButton(defineButton2.getCharacterId(), flag, sourceCode.toString());
+            layoutManager.addButton(defineButton2.getCharacterId(), buttonCondActionFlag, sourceCode.toString());
         }
     }
 }

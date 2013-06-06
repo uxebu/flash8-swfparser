@@ -205,7 +205,7 @@ import java.text.DecimalFormatSymbols;
  * results of mixing numbered and unnumbered argument
  * specifications in a format string are undefined.</p>
  *
- *<h4>Flag Characters</h4>
+ *<h4>ButtonCondActionFlag Characters</h4>
  *<p>
  * The flags and their meanings are:</p>
  *<dl>
@@ -2989,7 +2989,7 @@ public class PrintfFormat {
      */
     private boolean leadingSign = false;
     /**
-     * Flag indicating that left padding with spaces is
+     * ButtonCondActionFlag indicating that left padding with spaces is
      * specified.
      */
     private boolean leadingSpace = false;
@@ -3006,12 +3006,12 @@ public class PrintfFormat {
      */
     private boolean alternateForm = false;
     /**
-     * Flag indicating that left padding with zeroes is
+     * ButtonCondActionFlag indicating that left padding with zeroes is
      * specified.
      */
     private boolean leadingZeros = false;
     /**
-     * Flag indicating that the field width is *.
+     * ButtonCondActionFlag indicating that the field width is *.
      */
     private boolean variableFieldWidth = false;
     /**
@@ -3021,7 +3021,7 @@ public class PrintfFormat {
      */
     private int fieldWidth = 0;
     /**
-     * Flag indicating whether or not the field width
+     * ButtonCondActionFlag indicating whether or not the field width
      * has been set.
      */
     private boolean fieldWidthSet = false;
@@ -3038,11 +3038,11 @@ public class PrintfFormat {
     /** Default precision. */
     private final static int defaultDigits=6; 
     /**
-     * Flag indicating that the precision is *.
+     * ButtonCondActionFlag indicating that the precision is *.
      */
     private boolean variablePrecision = false;
     /**
-     * Flag indicating whether or not the precision has
+     * ButtonCondActionFlag indicating whether or not the precision has
      * been set.
      */
     private boolean precisionSet = false;
@@ -3055,19 +3055,19 @@ public class PrintfFormat {
     private boolean positionalPrecision=false;
     private int argumentPositionForPrecision=0;
     /**
-     * Flag specifying that a following d, i, o, u, x,
+     * ButtonCondActionFlag specifying that a following d, i, o, u, x,
      * or X conversion character applies to a type
      * short int.
      */
     private boolean optionalh = false;
     /**
-     * Flag specifying that a following d, i, o, u, x,
+     * ButtonCondActionFlag specifying that a following d, i, o, u, x,
      * or X conversion character applies to a type lont
      * int argument.
      */
     private boolean optionall = false;
     /**
-     * Flag specifying that a following e, E, f, g, or
+     * ButtonCondActionFlag specifying that a following e, E, f, g, or
      * G conversion character applies to a type double
      * argument.  This is a noop in Java.
      */
