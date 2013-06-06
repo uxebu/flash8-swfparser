@@ -3,7 +3,6 @@ package com.uxebu.swfparser.dump.generators;
 import com.jswiff.swfrecords.actions.ActionBlockReader;
 import com.jswiff.swfrecords.tags.DefineSprite;
 import com.jswiff.swfrecords.tags.DoAction;
-import com.jswiff.swfrecords.tags.DoInitAction;
 import com.uxebu.swfparser.dump.layout.LayoutManager;
 import org.swfparser.ActionBlockContext;
 import org.swfparser.CodeUtil;
@@ -15,13 +14,12 @@ import org.swfparser.operation.ByteCodeOperation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class DoInitActionGenerator implements CodeGenerator
+public class DoRootMovieActionGenerator implements CodeGenerator
 {
     private LayoutManager layoutManager;
 
-    public DoInitActionGenerator(LayoutManager layoutManager)
+    public DoRootMovieActionGenerator(LayoutManager layoutManager)
     {
         this.layoutManager = layoutManager;
     }
@@ -29,8 +27,8 @@ public class DoInitActionGenerator implements CodeGenerator
     @Override
     public void generate(ActionBlockContext context)
     {
-        DoInitAction doAction = (DoInitAction) context.getTag();
-        processActions(context, doAction.getInitActions());
+        DoAction doAction = (DoAction) context.getTag();
+        processActions(context, doAction.getActions());
     }
 
     protected void processActions(ActionBlockContext context, ActionBlockReader actionBlock)
@@ -69,9 +67,9 @@ public class DoInitActionGenerator implements CodeGenerator
             block.append(writeOp);
         }
 
-        if (operations.size() > 0)
+        if (operations.size() > 0 && context.getParentContext() == null)
         {
-            layoutManager.addInitClip(((DoInitAction) context.getTag()).getSpriteId(), block.toString());
+            layoutManager.addRootMovie(context.getFrameNum(), block.toString());
         }
     }
 }

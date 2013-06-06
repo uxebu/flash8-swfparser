@@ -17,7 +17,10 @@ import com.jswiff.swfrecords.tags.Tag;
 import com.uxebu.swfparser.dump.assets.AssetManager;
 import com.uxebu.swfparser.dump.generators.CodeGenerator;
 import com.uxebu.swfparser.dump.generators.DefineButton2Generator;
-import com.uxebu.swfparser.dump.generators.DoInitActionGenerator;import com.uxebu.swfparser.dump.layout.LayoutManager;
+import com.uxebu.swfparser.dump.generators.DoActionGenerator;
+import com.uxebu.swfparser.dump.generators.DoRootMovieActionGenerator;
+import com.uxebu.swfparser.dump.generators.DoInitActionGenerator;
+import com.uxebu.swfparser.dump.layout.LayoutManager;
 import org.apache.log4j.Logger;
 import org.swfparser.ActionBlockContext;
 
@@ -141,6 +144,7 @@ public class ActionScriptDump
 
             generateShowFrame(context);
             generateDefineButton2(context);
+            generateDoInitAction(context);
             generateDoAction(context);
 
             if (context.getTag() instanceof DefineSprite)
@@ -162,6 +166,15 @@ public class ActionScriptDump
 
     }
 
+    private void generateDoInitAction(ActionBlockContext context)
+    {
+        if (context.getTag() instanceof DoInitAction)
+        {
+            CodeGenerator generator = new DoInitActionGenerator(layoutManager);
+            generator.generate(context);
+        }
+    }
+
     private void generateShowFrame(ActionBlockContext context)
     {
         if (context.getTag() instanceof ShowFrame)
@@ -174,7 +187,17 @@ public class ActionScriptDump
     {
         if (context.getTag() instanceof DoAction)
         {
-            CodeGenerator generator = new DoInitActionGenerator(layoutManager);
+            CodeGenerator generator;
+
+            if (context.getParentContext() != null)
+            {
+                generator = new DoActionGenerator(layoutManager);
+            }
+            else
+            {
+                generator = new DoRootMovieActionGenerator(layoutManager);
+            }
+
             generator.generate(context);
         }
 
