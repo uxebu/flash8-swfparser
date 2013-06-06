@@ -20,7 +20,7 @@ public class LayoutManager
     {
         createDirectoryIfNotExists(outputDirectory);
 
-        for (String directory : new String[]{"buttons", "classes", "sprites"})
+        for (String directory : new String[]{"button", "initclip", "sprite"})
         {
             createDirectoryIfNotExists(outputDirectory + "/" + directory);
         }
@@ -38,7 +38,7 @@ public class LayoutManager
 
     public void addButton(int characterId, Flag flag, String content)
     {
-        dumpFile(outputDirectory + "/buttons/button-" + characterId + "-" + flag + ".js", content);
+        dumpFile(outputDirectory + "/button/button-" + characterId + "-" + flag + ".js", content);
     }
 
     private void dumpFile(String fileName, String content)
@@ -59,16 +59,16 @@ public class LayoutManager
 
     public void addSprite(int characterId, int frameNumber, String content)
     {
-        dumpFile(outputDirectory + "/sprites/sprite-" + characterId + "-" + frameNumber + ".js", content);
+        dumpFile(outputDirectory + "/sprite/sprite-" + characterId + "-" + frameNumber + ".js", content);
     }
 
-    public void addClass(String fileName, String content)
+    public void addInitClip(int spriteId, String content)
     {
-
+        dumpFile(outputDirectory + "/initclip/initclip-" + spriteId + ".js", content);
     }
 
-    public void setRootMovie(String content)
+    public void addRootMovie(int frameNumber, String content)
     {
-
+        dumpFile(outputDirectory + "/rootMovie-" + frameNumber + ".js", content);
     }
 }

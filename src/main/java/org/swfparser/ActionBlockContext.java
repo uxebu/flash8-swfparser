@@ -74,13 +74,13 @@ public class ActionBlockContext extends TagContext
 
         StringBuffer buf = new StringBuffer();
 
-        buf.append("   var tag = '")
+        buf.append("var tag = '")
                 .append(TagConstants.getTagName(ctx.getTag().getCode()))
                 .append("';\n");
 
         if (ctx.getTag() instanceof DefinitionTag)
         {
-            buf.append("   var characterId = ")
+            buf.append("var characterId = ")
                     .append(((DefinitionTag) ctx.getTag()).getCharacterId())
                     .append(";\n");
         }
@@ -99,11 +99,11 @@ public class ActionBlockContext extends TagContext
             {
                 int characterId = ((DefineSprite) ctx.getParentContext().getTag()).getCharacterId();
 
-                buf.append("   var characterId = ")
+                buf.append("var characterId = ")
                         .append(characterId)
                         .append(";\n");
 
-                buf.append("   var frameNumber = ")
+                buf.append("var frameNumber = ")
                         .append(ctx.getFrameNum())
                         .append(";\n");
             }

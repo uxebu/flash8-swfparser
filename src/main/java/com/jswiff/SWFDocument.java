@@ -25,6 +25,7 @@ import com.jswiff.swfrecords.RGB;
 import com.jswiff.swfrecords.Rect;
 import com.jswiff.swfrecords.SWFHeader;
 import com.jswiff.swfrecords.tags.Tag;
+import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 
@@ -38,7 +39,10 @@ import java.util.List;
  * <code>SWFWriter</code>.
  */
 public class SWFDocument implements Serializable {
-	/** The version of the JSwiff library */
+
+    private static Logger logger = Logger.getLogger(SWFDocument.class);
+
+    /** The version of the JSwiff library */
 	public static final String JSWIFF_VERSION = "8.0-beta-2";
 
 	/**
@@ -284,7 +288,7 @@ public class SWFDocument implements Serializable {
 		if (version < 1) {
 			throw new IllegalArgumentException("Flash version must be at least 1!");
 		} else if (version > MAX_SWF_VERSION) {
-			throw new IllegalArgumentException("Flash version > " + MAX_SWF_VERSION + " not supported!");
+            logger.warn("Flash version > " + MAX_SWF_VERSION + " not fully supported. You could get unexpected errors during the conversion process!!!");
 		}
 		header.setVersion(version);
 	}
