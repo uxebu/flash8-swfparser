@@ -12,6 +12,7 @@ import com.jswiff.swfrecords.tags.DefineButton2;
 import com.jswiff.swfrecords.tags.DefineSprite;
 import com.jswiff.swfrecords.tags.DoAction;
 import com.jswiff.swfrecords.tags.DoInitAction;
+import com.jswiff.swfrecords.tags.PlaceObject2;
 import com.jswiff.swfrecords.tags.ShowFrame;
 import com.jswiff.swfrecords.tags.Tag;
 import com.uxebu.swfparser.dump.assets.AssetManager;
@@ -20,6 +21,7 @@ import com.uxebu.swfparser.dump.generators.DefineButton2Generator;
 import com.uxebu.swfparser.dump.generators.DoActionGenerator;
 import com.uxebu.swfparser.dump.generators.DoRootMovieActionGenerator;
 import com.uxebu.swfparser.dump.generators.DoInitActionGenerator;
+import com.uxebu.swfparser.dump.generators.PlaceObject2Generator;
 import com.uxebu.swfparser.dump.layout.LayoutManager;
 import org.apache.log4j.Logger;
 import org.swfparser.ActionBlockContext;
@@ -146,6 +148,7 @@ public class ActionScriptDump
             generateDefineButton2(context);
             generateDoInitAction(context);
             generateDoAction(context);
+            generateDoPlaceObject2(context);
 
             if (context.getTag() instanceof DefineSprite)
             {
@@ -164,6 +167,15 @@ public class ActionScriptDump
             // tag.
         } // for
 
+    }
+
+    private void generateDoPlaceObject2(ActionBlockContext context)
+    {
+        if (context.getTag() instanceof PlaceObject2)
+        {
+            CodeGenerator generator = new PlaceObject2Generator(layoutManager);
+            generator.generate(context);
+        }
     }
 
     private void generateDoInitAction(ActionBlockContext context)
