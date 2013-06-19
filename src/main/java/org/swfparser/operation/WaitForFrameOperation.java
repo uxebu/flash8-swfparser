@@ -40,7 +40,7 @@ public class WaitForFrameOperation extends AbstractCompoundOperation {
 	public String getStringValue(int level) {
 		StringBuffer buf = new StringBuffer()
 			.append(CodeUtil.getIndent(level))
-			.append("ifFrameLoaded(");
+			.append("if (frameLoaded(");
 		
 		if (isScene) {
 			
@@ -48,7 +48,7 @@ public class WaitForFrameOperation extends AbstractCompoundOperation {
 		
 		buf
 			.append(frame.getStringValue(level))
-			.append(") {\n");
+			.append(")) {\n");
 		
 		for (Operation operation : operations) {
 			buf
