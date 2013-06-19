@@ -44,9 +44,9 @@ public class SetTargetOperation extends AbstractCompoundOperation {
 	public String getStringValue(int level) {
 		StringBuffer buf = new StringBuffer()
 		.append(CodeUtil.getIndent(level))
-		.append("tellTarget(")
+		.append("if (tellTarget(")
 		.append(targetName.getStringValue(level))
-		.append(") {\n")
+		.append(")) {\n")
 		;
 		
 		for (Operation op : operations) {
