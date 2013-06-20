@@ -5,4 +5,4 @@ if [ $# -ne 2 ]; then
    exit
 fi
 
-mvn exec:java -Dexec.mainClass="com.uxebu.swfparser.dump.ActionScriptBatchDump" -Dinput=$1 -Doutput=$2
+mvn clean compile exec:java -Dexec.mainClass="com.uxebu.swfparser.dump.ActionScriptBatchDump" -Dinput=$1 -Doutput=$2
