@@ -7,12 +7,12 @@
 
 package org.swfparser.operation;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-import org.springframework.util.StringUtils;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
@@ -135,7 +135,7 @@ public class DefineFunction2Operation extends AbstractCompoundOperation {
 
 	public String getStringValue(int level) {
 		StringBuffer buf = new StringBuffer();
-		if (StringUtils.hasText(thisFunction.getName())) { 
+		if (org.springframework.util.StringUtils.hasText(thisFunction.getName())) {
 			buf
 			.append(CodeUtil.getIndent(level))
 			.append("function ")
@@ -145,9 +145,17 @@ public class DefineFunction2Operation extends AbstractCompoundOperation {
 //			.append(CodeUtil.getIndent(level))
 			.append("function");
 		}
-			
-		buf
-			.append("()")
+
+
+        List<String> params = new ArrayList<>();
+        for (RegisterParam param: thisFunction.getParameters()) {
+            params.add(param.getParamName());
+        }
+
+
+        buf.append("(");
+        buf.append(StringUtils.join(params, ","));
+		buf.append(")")
 			.append("{\n");
 		
 		for (Operation op : operations) {
