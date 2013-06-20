@@ -7,9 +7,11 @@
 
 package org.swfparser.operation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import com.jswiff.swfrecords.RegisterParam;
 import org.springframework.util.StringUtils;
 
 import org.apache.log4j.Logger;
@@ -82,11 +84,17 @@ public class DefineFunctionOperation extends AbstractCompoundOperation {
 //			.append(CodeUtil.getIndent(level))
 			.append("function");
 		}
-		
-		buf
-			.append("()")
-			.append(" {\n");
-		
+
+        List<String> params = new ArrayList<>();
+        for (String param: defineFunction.getParameters()) {
+            params.add(param);
+        }
+
+        buf.append("(");
+        buf.append(org.apache.commons.lang.StringUtils.join(params, ","));
+		buf.append(")")
+			.append("{\n");
+
 		for (Operation op : operations) {
 			buf.append(op.getStringValue(level+1)+CodeUtil.endOfStatement(op)+"\n");
 		}
