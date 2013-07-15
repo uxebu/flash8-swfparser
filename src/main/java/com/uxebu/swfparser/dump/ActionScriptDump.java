@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.swfparser.ActionBlockContext;
 
 import java.util.List;
+import java.io.File;
 
 public class ActionScriptDump
 {
@@ -43,6 +44,13 @@ public class ActionScriptDump
     {
         this.layoutManager = layoutManager;
         this.doc = swfDocument;
+    }
+
+    public static void main(String[] args) {
+        LayoutManager layoutManager = new LayoutManager(System.getProperty("output", "as2"));
+        File inputFile = new File(args[0]);
+        AssetManager assetManager = new AssetManager(inputFile.getParent());
+        new ActionScriptDump(layoutManager, assetManager.getSWFFile(inputFile.getName()));
     }
 
     public void process()
