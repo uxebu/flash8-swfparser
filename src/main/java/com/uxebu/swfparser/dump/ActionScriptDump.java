@@ -33,14 +33,16 @@ public class ActionScriptDump
     private static Logger logger = Logger.getLogger(ActionScriptDump.class);
     protected SWFDocument doc;
     protected LayoutManager layoutManager;
-    protected AssetManager assetManager;
 
     public ActionScriptDump(LayoutManager layoutManager, AssetManager assetManager, String fileName)
     {
-        this.layoutManager = layoutManager;
-        this.assetManager = assetManager;
+        this(layoutManager, assetManager.getSWFFile(fileName));
+    }
 
-        this.doc = assetManager.getSWFFile(fileName);
+    public ActionScriptDump(LayoutManager layoutManager, SWFDocument swfDocument)
+    {
+        this.layoutManager = layoutManager;
+        this.doc = swfDocument;
     }
 
     public void process()
