@@ -50,7 +50,7 @@ public class ActionScriptDump
         LayoutManager layoutManager = new LayoutManager(System.getProperty("output", "as2"));
         File inputFile = new File(args[0]);
         AssetManager assetManager = new AssetManager(inputFile.getParent());
-        new ActionScriptDump(layoutManager, assetManager.getSWFFile(inputFile.getName()));
+        new ActionScriptDump(layoutManager, assetManager.getSWFFile(inputFile.getName())).process();
     }
 
     public void process()
