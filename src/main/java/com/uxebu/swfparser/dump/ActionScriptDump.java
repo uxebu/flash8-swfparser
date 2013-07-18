@@ -167,7 +167,7 @@ public class ActionScriptDump
                 List<Tag> controlTags = defineSprite.getControlTags();
                 ActionBlockContext newContext = new ActionBlockContext(layoutManager);
                 newContext.setParentContext(context);
-                newContext.setFrameNum(context.getFrameNum());
+                //newContext.setFrameNum(context.getFrameNum());
                 newContext.setDocument(context.getDocument());
                 processTags(newContext, controlTags);
             }
