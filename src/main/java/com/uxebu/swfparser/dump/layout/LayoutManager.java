@@ -73,13 +73,13 @@ public class LayoutManager
         dumpFile(outputDirectory + "/rootMovie/rootMovie-" + frameNumber + ".js", content);
     }
 
-    public void addSpriteClipAction(int spriteCharacterId, int depth, ClipActionFlag flag, String content)
+    public void addSpriteClipAction(int spriteCharacterId, int frame, int depth, ClipActionFlag flag, String content)
     {
-        dumpFile(outputDirectory + "/sprite/sprite-" + spriteCharacterId + "-clipAction-" + depth + "-" + flag + ".js", content);
+        dumpFile(outputDirectory + "/sprite/sprite-" + spriteCharacterId + "-clipAction-" + frame + '-' + depth + "-" + flag + ".js", content);
     }
 
-    public void addRootMovieClipAction(int depth, ClipActionFlag flag, String content)
+    public void addRootMovieClipAction(int frame, int depth, ClipActionFlag flag, String content)
     {
-        dumpFile(outputDirectory + "/rootMovie/rootMovie-clipAction-" + depth + "-" + flag + ".js", content);
+        dumpFile(outputDirectory + "/rootMovie/rootMovie-clipAction-" + frame + '-' + depth + "-" + flag + ".js", content);
     }
 }

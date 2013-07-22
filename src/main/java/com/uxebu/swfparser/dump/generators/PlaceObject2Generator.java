@@ -24,6 +24,7 @@ public class PlaceObject2Generator implements CodeGenerator
 {
     private LayoutManager layoutManager;
     private PlaceObject2 placeObject2;
+    private int frameNo;
 
     public PlaceObject2Generator(LayoutManager layoutManager)
     {
@@ -34,6 +35,7 @@ public class PlaceObject2Generator implements CodeGenerator
     public void generate(ActionBlockContext context)
     {
         placeObject2 = (PlaceObject2) context.getTag();
+        frameNo = context.getFrameNum();
 
         if (placeObject2.getClipActions() != null)
         {
@@ -98,11 +100,11 @@ public class PlaceObject2Generator implements CodeGenerator
                 if (context.getParentContext() != null && context.getParentContext().getTag() instanceof DefineSprite)
                 {
                     DefineSprite parentTag = (DefineSprite) context.getParentContext().getTag();
-                    layoutManager.addSpriteClipAction(parentTag.getCharacterId(), placeObject2.getDepth(), flag, block.toString());
+                    layoutManager.addSpriteClipAction(parentTag.getCharacterId(), frameNo, placeObject2.getDepth(), flag, block.toString());
                 }
                 else
                 {
-                    layoutManager.addRootMovieClipAction(placeObject2.getDepth(), flag, block.toString());
+                    layoutManager.addRootMovieClipAction(frameNo, placeObject2.getDepth(), flag, block.toString());
                 }
             }
         }
