@@ -98,11 +98,11 @@ public class PlaceObject2Generator implements CodeGenerator
                 if (context.getParentContext() != null && context.getParentContext().getTag() instanceof DefineSprite)
                 {
                     DefineSprite parentTag = (DefineSprite) context.getParentContext().getTag();
-                    layoutManager.addSpriteClipAction(parentTag.getCharacterId(), placeObject2.getCharacterId(), flag, block.toString());
+                    layoutManager.addSpriteClipAction(parentTag.getCharacterId(), placeObject2.getDepth(), flag, block.toString());
                 }
                 else
                 {
-                    layoutManager.addRootMovieClipAction(placeObject2.getCharacterId(), flag, block.toString());
+                    layoutManager.addRootMovieClipAction(placeObject2.getDepth(), flag, block.toString());
                 }
             }
         }
