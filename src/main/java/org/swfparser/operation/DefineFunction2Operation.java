@@ -70,7 +70,7 @@ public class DefineFunction2Operation extends AbstractCompoundOperation {
 		
 		logger.debug("action.preloadsSuper()="+action.preloadsSuper());
 		if (action.preloadsSuper()) {
-			registers.set(preloadVariableIndex++, new StackValue("super"));
+            registers.set(preloadVariableIndex++, new StackValue("this.__super__.constructor"));
 		}
 
 		logger.debug("action.preloadsRoot()="+action.preloadsRoot());
