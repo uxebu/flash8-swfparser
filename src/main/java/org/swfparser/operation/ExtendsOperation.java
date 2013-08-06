@@ -30,7 +30,10 @@ public class ExtendsOperation extends AbstractOperation {
 	}
 
 	public String getStringValue(int level) {
-		return subClass.getStringValue(level)+" extends "+superClass.getStringValue(level);
+//		return subClass.getStringValue(level)+" extends "+superClass.getStringValue(level);
+        String className = subClass.getStringValue(level);
+        String superClassName = superClass.getStringValue(level);
+        return "Class({constructor: " + className + ", superClass: " + superClassName + "})";
 	}
 
 	public List<Operation> getOperations() {
