@@ -107,7 +107,7 @@ public class IfOperation extends AbstractCompoundOperation implements SkipOperat
 	
 	private boolean validateCondition(Operation op) {
 		logger.debug("Validating condition "+op);
-		return (op instanceof BooleanOperation);
+		return (op instanceof BooleanOperation || op instanceof ConvertOperation);
 	}
 
 	public int getArgsNumber() {
