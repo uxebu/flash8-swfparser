@@ -66,6 +66,32 @@ public class CodeUtil {
 					: op.getStringValue(level);
 	}
 
+    public static String getMemberGetExpression(Operation member, int level) {
+        StringBuilder buf = new StringBuilder();
+
+        String memberName = CodeUtil.getSimpleValue(member, level);
+        boolean useBrackets = !(member instanceof StackValue && StackValue.TYPE_STRING == ((StackValue) member).getType());
+        if (useBrackets) {
+            buf.append("[").append(memberName).append("]");
+        } else {
+            boolean containsSpecialChars = !memberName.matches("[a-zA-Z][a-zA-Z0-9]+");
+            if (containsSpecialChars) {
+                boolean containsSingleQuote = memberName.contains("'");
+                boolean containsDoubleQuote = memberName.contains("\"");
+                if (containsSingleQuote && containsDoubleQuote) {
+                    buf.append("['").append(memberName.replace("'", "\\'")).append("']");
+                } else if (containsSingleQuote) {
+                    buf.append("[\"").append(memberName).append("\"]");
+                } else {
+                    buf.append("['").append(memberName).append("']");
+                }
+            } else {
+                buf.append(".").append(memberName);
+            }
+        }
+
+        return buf.toString();
+    }
 	
 
 }

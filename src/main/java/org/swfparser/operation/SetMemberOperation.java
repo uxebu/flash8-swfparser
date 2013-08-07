@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 
 import org.swfparser.CodeUtil;
 import org.swfparser.Operation;
-import com.jswiff.swfrecords.actions.StackValue;
 
 public class SetMemberOperation extends AbstractOperation {
 
@@ -44,15 +43,13 @@ public class SetMemberOperation extends AbstractOperation {
 	}
 
 	public String getStringValue(int level) {
-		
-		return new StringBuffer()
-			.append(CodeUtil.getIndent(level))
-			.append(CodeUtil.getSimpleValue(object,level))
-			.append(".")
-			.append(CodeUtil.getSimpleValue(member,level))
-			.append(" = ")
-			.append(value.getStringValue(level))
-			.toString();
+        StringBuilder value = new StringBuilder()
+            .append(CodeUtil.getIndent(level))
+            .append(CodeUtil.getSimpleValue(object, level))
+            .append(CodeUtil.getMemberGetExpression(member, level))
+            .append(" = ")
+            .append(this.value.getStringValue(level));
+        return value.toString();
 	}
 	
 	@Override

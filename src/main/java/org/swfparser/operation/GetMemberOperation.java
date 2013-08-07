@@ -34,15 +34,9 @@ public class GetMemberOperation extends AbstractOperation implements BooleanOper
 
 	public String getStringValue(int level) {
 		StringBuffer buf = new StringBuffer() 
-			.append(CodeUtil.getSimpleValue(objectName, level));
-		
-		if ((memberName instanceof StackValue && StackValue.TYPE_STRING==((StackValue)memberName).getType())) {
-			buf.append(".").append(((StackValue)memberName).getString());
-		} else {
-			buf.append("[").append(memberName.getStringValue(level)).append("]");
-		}
-
-		return buf.toString(); 
+			.append(CodeUtil.getSimpleValue(objectName, level))
+            .append(CodeUtil.getMemberGetExpression(memberName, level));
+		return buf.toString();
 	}
 	
 	@Override
