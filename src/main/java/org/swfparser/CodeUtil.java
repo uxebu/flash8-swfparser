@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.jswiff.swfrecords.actions.StackValue;
+import org.swfparser.operation.GetMemberOperation;
 
 public class CodeUtil {
 	
@@ -71,6 +72,7 @@ public class CodeUtil {
 
         String memberName = CodeUtil.getSimpleValue(member, level);
         boolean useBrackets = !(member instanceof StackValue && StackValue.TYPE_STRING == ((StackValue) member).getType());
+        useBrackets = useBrackets || (member instanceof GetMemberOperation);
         if (useBrackets) {
             buf.append("[").append(memberName).append("]");
         } else {
