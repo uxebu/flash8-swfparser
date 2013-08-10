@@ -76,7 +76,7 @@ public class CodeUtil {
         if (useBrackets) {
             buf.append("[").append(memberName).append("]");
         } else {
-            boolean containsSpecialChars = !memberName.matches("[a-zA-Z][a-zA-Z0-9]+");
+            boolean containsSpecialChars = !memberName.matches("[a-zA-Z_][a-zA-Z0-9_]+");
             if (containsSpecialChars) {
                 boolean containsSingleQuote = memberName.contains("'");
                 boolean containsDoubleQuote = memberName.contains("\"");
