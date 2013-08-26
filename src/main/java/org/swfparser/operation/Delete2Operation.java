@@ -14,8 +14,11 @@ import org.swfparser.Operation;
 
 public class Delete2Operation extends UnaryOperation {
 
+    protected Operation property;
+
 	public Delete2Operation(Stack<Operation> stack) {
 		super(stack);
+        property = stack.pop();
 	}
 
 	public String getStringValue(int level) {
@@ -23,7 +26,8 @@ public class Delete2Operation extends UnaryOperation {
 		new StringBuffer()
 		.append(CodeUtil.getIndent(level))
 		.append("delete ")
-		.append(op.getStringValue(level))
+        .append(CodeUtil.getSimpleValue(property, level))
+//		.append(op.getStringValue(level))
 		
 		.toString();
 	}
