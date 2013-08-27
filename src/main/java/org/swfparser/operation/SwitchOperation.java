@@ -125,24 +125,23 @@ public class SwitchOperation extends AbstractCompoundOperation {
 				.append(CodeUtil.endOfStatement(op))
 				.append("\n");
 			}
-			
-			// default clause
-			if (!defaultOperations.isEmpty()) {
-				buf
-				.append(CodeUtil.getIndent(level+1))
-				.append("default:\n");
-				
-				for (Operation op : defaultOperations) {
-					buf
-					.append(op.getStringValue(level+2))
-					.append(CodeUtil.endOfStatement(op))
-					.append("\n");
-				}
-			}
-			
 			buf.append(CodeUtil.getIndent(level+1)).append("\n");
 		}
-		
+        
+        // default clause
+        if (!defaultOperations.isEmpty()) {
+            buf
+            .append(CodeUtil.getIndent(level+1))
+            .append("default:\n");
+
+            for (Operation op : defaultOperations) {
+                buf
+                .append(op.getStringValue(level+2))
+                .append(CodeUtil.endOfStatement(op))
+                .append("\n");
+            }
+        }
+
 		buf.append(CodeUtil.getIndent(level)).append("}");
 		
 		return buf.toString();
