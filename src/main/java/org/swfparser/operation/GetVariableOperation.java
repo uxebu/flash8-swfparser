@@ -10,7 +10,6 @@ package org.swfparser.operation;
 import java.util.Stack;
 
 import org.swfparser.BooleanOperation;
-import org.swfparser.NameResolver;
 import org.swfparser.Operation;
 import org.swfparser.Priority;
 import com.jswiff.swfrecords.actions.StackValue;
@@ -29,12 +28,22 @@ public class GetVariableOperation extends UnaryOperation implements BooleanOpera
 	@Override
 	public String getStringValue(int level) {
 		String variableName;
-		if (op instanceof StackValue && StackValue.TYPE_STRING==((StackValue)op).getType()) { 
-			variableName = ((StackValue)op).getString();
-		} else {
-			variableName = "eval("+op.getStringValue(level)+")";
-		}
-//		return NameResolver.getVariableName(vaiableName);
+		if (op instanceof StackValue && StackValue.TYPE_STRING==((StackValue)op).getType()) {
+            // e.g. `eval("<anything>")`
+            String stringValue = ((StackValue)op).getString();
+            if (stringValue.matches("[a-zA-Z_][a-zA-Z0-9_]*") &&
+// TODO complete the check in the line below, or is it complete?
+                !stringValue.matches("false|true|null|undefined")) {
+                // e.g. `eval("x")` or `eval("_root")`
+                variableName = stringValue;
+            } else {
+                // e.g. `eval("not looking like a var, e.g. special chars, etc.")`
+                variableName = "eval("+ op.getStringValue(level) +")";
+            }
+        } else {
+            // e.g. `eval(_global.e + '..')`
+            variableName = "eval("+ op.getStringValue(level) +")";
+        }
 		return variableName;
 	}
 	
