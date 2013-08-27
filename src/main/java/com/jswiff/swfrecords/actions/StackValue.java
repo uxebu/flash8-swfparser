@@ -645,7 +645,8 @@ public class StackValue implements Serializable, Operation, BooleanOperation/*, 
 	
 	private static String escapeString(String v) {
 		v = v.replaceAll("\\\\", "\\\\\\\\");
-		v = v.replaceAll("\n", "\\\\n");
+        v = v.replaceAll("\n", "\\\\n");
+        v = v.replaceAll("\"", "\\\\\"");
 		return v;
 	}
 	
