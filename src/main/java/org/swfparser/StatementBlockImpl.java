@@ -436,8 +436,10 @@ public class StatementBlockImpl implements StatementBlock {
 			case ActionConstants.GET_TIME:
 				stack.push(new SimpleFunctionOperation("getTimer()"));
 				break;
+            case ActionConstants.THROW:
+                addStatement(new ThrowOperation(stack), action);
+                break;
 
-		
 			//
 			// Arithmetic operations
 			//				
@@ -827,7 +829,7 @@ public class StatementBlockImpl implements StatementBlock {
 	
 				
 			default:
-				logger.error("UNSUPPORTED ACTION");
+				logger.error("UNSUPPORTED ACTION " + action.getCode());
 				
 			
 		}

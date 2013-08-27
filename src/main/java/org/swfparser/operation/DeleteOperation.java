@@ -25,8 +25,6 @@ public class DeleteOperation extends AbstractOperation {
 		super(stack);
 		property = stack.pop();
 		object = stack.pop();
-		
-		
 	}
 
 	public int getArgsNumber() {
