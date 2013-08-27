@@ -647,6 +647,8 @@ public class StackValue implements Serializable, Operation, BooleanOperation/*, 
 		v = v.replaceAll("\\\\", "\\\\\\\\");
         v = v.replaceAll("\n", "\\\\n");
         v = v.replaceAll("\"", "\\\\\"");
+        v = v.replaceAll("\t", "\\\\t");
+        v = v.replaceAll("\r", "\\\\r");
 		return v;
 	}
 	
