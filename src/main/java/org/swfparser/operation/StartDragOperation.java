@@ -61,11 +61,12 @@ public class StartDragOperation extends AbstractOperation {
 			.append("startDrag(")
 			.append(target.getStringValue(level))
 			.append(",")
-			.append(lock)
+			.append(lock.getStringValue(level))
 			;
 		
 		if (x1!=null && x2!=null && y1!=null && y2!=null) {
 			buf
+			.append(",")
 			.append(x1.getStringValue(level))
 			.append(",")
 			.append(y1.getStringValue(level))
