@@ -56,9 +56,8 @@ public class ImplementsOperation extends AbstractOperation {
 	}
 
 	public String getStringValue(int level) {
-		StringBuffer buf = new StringBuffer()
-		.append(constructor.getStringValue(level))
-		.append(" implements ");
+        String className = constructor.getStringValue(level);
+		StringBuffer buf = new StringBuffer();
 		int idx=0;
 		for (Operation interFace : interfaces) {
 			if (idx++>0) {
@@ -66,7 +65,7 @@ public class ImplementsOperation extends AbstractOperation {
 			}
 			buf.append(interFace.getStringValue(level));
 		}
-		return buf.toString();
+        return "Class({constructor: " + className + ", interfaces: [" + buf.toString() + "]})";
 	}
 
 	/* (non-Javadoc)
