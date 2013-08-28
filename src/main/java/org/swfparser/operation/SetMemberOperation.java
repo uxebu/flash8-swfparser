@@ -43,13 +43,13 @@ public class SetMemberOperation extends AbstractOperation {
 	}
 
 	public String getStringValue(int level) {
-        StringBuilder value = new StringBuilder()
-            .append(CodeUtil.getIndent(level))
-            .append(CodeUtil.getSimpleValue(object, level))
-            .append(CodeUtil.getMemberGetExpression(member, level))
-            .append(" = ")
-            .append(this.value.getStringValue(level));
-        return value.toString();
+        StringBuilder buf = new StringBuilder();
+        buf.append(CodeUtil.getIndent(level));
+        buf.append(object.getStringValue(level));
+        buf.append(CodeUtil.getMemberGetExpression(member, level));
+        buf.append(" = ");
+        buf.append(this.value.getStringValue(level));
+        return buf.toString();
 	}
 	
 	@Override

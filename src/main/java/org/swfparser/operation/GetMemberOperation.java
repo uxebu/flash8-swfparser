@@ -33,9 +33,9 @@ public class GetMemberOperation extends AbstractOperation implements BooleanOper
 	}
 
 	public String getStringValue(int level) {
-		StringBuffer buf = new StringBuffer() 
-			.append(CodeUtil.getSimpleValue(objectName, level))
-            .append(CodeUtil.getMemberGetExpression(memberName, level));
+		StringBuffer buf = new StringBuffer();
+        buf.append(objectName.getStringValue(level));
+        buf.append(CodeUtil.getMemberGetExpression(memberName, level));
 		return buf.toString();
 	}
 	
