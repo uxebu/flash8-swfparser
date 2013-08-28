@@ -59,7 +59,7 @@ public class CallMethodOperation extends AbstractOperation implements BooleanOpe
 		if (isStatement) {
 			buf.append(CodeUtil.getIndent(level));
 		}
-        String simpleValue = CodeUtil.getSimpleValue(variable, level);
+        String simpleValue = variable.getStringValue(level);
         buf.append(simpleValue.equals("super") ? "this.constructor.__super__" : simpleValue);
 		
 		String stringMethodName;
