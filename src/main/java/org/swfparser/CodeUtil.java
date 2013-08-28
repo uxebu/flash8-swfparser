@@ -59,12 +59,11 @@ public class CodeUtil {
 	}
 	
 	public static String getSimpleValue(Operation op, int level) {
-		return (op instanceof StackValue 
-				&& StackValue.TYPE_STRING == ((StackValue)op).getType()) 
-				
-				? ((StackValue)op).getString() 
-						
-					: op.getStringValue(level);
+        if (op instanceof StackValue && StackValue.TYPE_STRING == ((StackValue)op).getType()) {
+      	    return ((StackValue)op).getString();
+        } else {
+      		return op.getStringValue(level);
+        }
 	}
 
     public static String getMemberGetExpression(Operation member, int level) {
