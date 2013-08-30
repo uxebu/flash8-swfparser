@@ -32,15 +32,12 @@ public class DeleteOperation extends AbstractOperation {
 	}
 
 	public String getStringValue(int level) {
-		
-		return 
-		new StringBuffer()
-		.append(CodeUtil.getIndent(level))
-		.append("delete ")
-		.append(CodeUtil.getSimpleValue(object, level))
-		.append(".")
-		.append(CodeUtil.getSimpleValue(property, level))
-		.toString();
+		StringBuilder buf = new StringBuilder();
+		buf.append(CodeUtil.getIndent(level));
+        buf.append("delete ");
+        buf.append(CodeUtil.getSimpleValue(object, level));
+        buf.append(CodeUtil.getMemberGetExpression(property, level));
+        return buf.toString();
 	}
 
 	public List<Operation> getOperations() {
