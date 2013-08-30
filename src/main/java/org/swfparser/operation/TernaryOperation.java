@@ -35,16 +35,16 @@ public class TernaryOperation extends AbstractOperation implements BooleanOperat
 	}
 
 	public String getStringValue(int level) {
-		return 
-			new StringBuffer()
-				.append(isStatement ? CodeUtil.getIndent(level) : "")
-				.append("(")
-				.append(condition.getStringValue(level))
-				.append(") ? ")
-				.append(trueOp.getStringValue(level))
-				.append(" : ")
-				.append(falseOp.getStringValue(level))
-				.toString();
+		StringBuilder buf = new StringBuilder();
+		buf.append(isStatement ? CodeUtil.getIndent(level) : "");
+        buf.append("(");
+        buf.append(condition.getStringValue(level));
+        buf.append(" ? ");
+        buf.append(trueOp.getStringValue(level));
+        buf.append(" : ");
+        buf.append(falseOp.getStringValue(level));
+        buf.append(")");
+        return buf.toString();
 				
 	}
 	
