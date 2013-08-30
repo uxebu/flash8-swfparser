@@ -160,10 +160,9 @@ public class DefineFunction2Operation extends AbstractCompoundOperation {
 		
 		for (Operation op : operations) {
 //			logger.debug("DF2:OP::: "+op);
-			buf
-			.append(op.getStringValue(level+1))
-			.append(CodeUtil.endOfStatement(op))
-			.append("\n");
+			buf.append(op.getStringValue(level+1));
+			buf.append(CodeUtil.endOfStatement(op));
+			buf.append("\n");
 		}
 		
 		buf.append(CodeUtil.getIndent(level));

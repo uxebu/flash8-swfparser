@@ -21,7 +21,7 @@ public class TraceOperation extends UnaryOperation {
 
 	@Override
 	public String getStringValue(int level) {
-		return CodeUtil.getIndent(level)+"trace("+op.getStringValue(level)+")";
+		return CodeUtil.getIndent(level)+"trace(" + op.getStringValue(level) + ")";
 	}
 
 }
