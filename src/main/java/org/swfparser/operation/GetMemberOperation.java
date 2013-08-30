@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
 import org.swfparser.BooleanOperation;
 import org.swfparser.CodeUtil;
 import org.swfparser.Operation;
@@ -21,11 +22,13 @@ public class GetMemberOperation extends AbstractOperation implements BooleanOper
 
 	private Operation objectName;
 	private Operation memberName;
-	
+    private static Logger logger = Logger.getLogger(SetVariableOperation.class);
+
 	public GetMemberOperation(Stack<Operation> stack) {
 		super(stack);
 		memberName = stack.pop();
 		objectName = stack.pop();
+        logger.debug("#GetMemberOperation() " + memberName + " . " + objectName);
 	}
 
 	public int getArgsNumber() {
@@ -33,7 +36,7 @@ public class GetMemberOperation extends AbstractOperation implements BooleanOper
 	}
 
 	public String getStringValue(int level) {
-		StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append(objectName.getStringValue(level));
         buf.append(CodeUtil.getMemberGetExpression(memberName, level));
 		return buf.toString();
