@@ -55,7 +55,7 @@ public class DefineFont2 extends DefinitionTag {
   private short[] advanceTable;
   private Rect[] boundsTable;
   private KerningRecord[] kerningTable;
-  private int numGlyphs;
+  protected int numGlyphs;
   private boolean hasLayout;
 
   /**
@@ -545,19 +545,10 @@ public class DefineFont2 extends DefinitionTag {
       fontNameLen--;
     }
     fontName    = new String(fontNameBuffer, 0, fontNameLen, "UTF-8");
+
     numGlyphs   = inStream.readUI16();
     // skip offsets, we don't need them
-    if (wideOffsets) {
-      // skip offsetTable, UI32
-      inStream.readBytes(numGlyphs * 4);
-      // skip codeTableOffset, UI32
-      inStream.readBytes(4);
-    } else {
-      // skip offsetTable, UI16
-      inStream.readBytes(numGlyphs * 2);
-      // skip CodeTableOffset, UI16
-      inStream.readBytes(2);
-    }
+    readOnHandlingWideOffsets(inStream, wideOffsets);
     if (numGlyphs > 0) {
       glyphShapeTable = new Shape[numGlyphs];
       for (int i = 0; i < numGlyphs; i++) {
@@ -595,6 +586,20 @@ public class DefineFont2 extends DefinitionTag {
           kerningTable[i] = new KerningRecord(inStream, wideCodes);
         }
       }
+    }
+  }
+
+  protected void readOnHandlingWideOffsets(InputBitStream inStream, boolean wideOffsets) throws IOException {
+    if (wideOffsets) {
+      // skip offsetTable, UI32
+      inStream.readBytes(numGlyphs * 4);
+      // skip codeTableOffset, UI32
+      inStream.readBytes(4);
+    } else {
+      // skip offsetTable, UI16
+      inStream.readBytes(numGlyphs * 2);
+      // skip CodeTableOffset, UI16
+      inStream.readBytes(2);
     }
   }
 }

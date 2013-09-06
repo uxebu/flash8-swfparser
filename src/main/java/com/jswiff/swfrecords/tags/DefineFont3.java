@@ -21,7 +21,10 @@
 
 package com.jswiff.swfrecords.tags;
 
+import com.jswiff.io.InputBitStream;
 import com.jswiff.swfrecords.Shape;
+
+import java.io.IOException;
 
 
 /**
@@ -45,4 +48,19 @@ public final class DefineFont3 extends DefineFont2 {
   DefineFont3() {
     // empty
   }
+
+  protected void readOnHandlingWideOffsets(InputBitStream inStream, boolean wideOffsets) throws IOException {
+    if (wideOffsets) {
+      // skip offsetTable, UI32
+      inStream.readBytes(numGlyphs * 4);
+      // skip codeTableOffset, UI32
+//      inStream.readBytes(4);
+    } else {
+      // skip offsetTable, UI16
+      inStream.readBytes(numGlyphs * 2);
+      // skip CodeTableOffset, UI16
+//      inStream.readBytes(2);
+    }
+  }
+
 }
