@@ -59,8 +59,8 @@ public class DoInitActionGenerator implements CodeGenerator
     {
         StringBuffer block = new StringBuffer();
 
-        block.append(context.getDumpString());
-        block.append("\n");
+//        block.append(context.getDumpString());
+//        block.append("\n");
 
         for (Operation op : operations)
         {
