@@ -1153,7 +1153,11 @@ public class StatementBlockImpl implements StatementBlock {
 							
 					logger.debug("V:"+stackValue+" => "+registerValue);
 					stack.push(registerValue);
-                    stack.push(new GetVariableOperation(stack)); // This treats everything that is in a register as a variable, works in all tests I wrote, but that's all the proof I have (wk).
+                    // Let's only do this for "simple" stack values
+                    // Without it we would get all DefinedFunction2 parameters wrapped in an `eval`.
+                    if (registerValue instanceof StackValue) {
+                        stack.push(new GetVariableOperation(stack)); // This treats everything that is in a register as a variable, works in all tests I wrote, but that's all the proof I have (wk).
+                    }
 					break;
 					
 					
