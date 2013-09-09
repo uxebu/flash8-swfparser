@@ -23,6 +23,7 @@ package com.jswiff.swfrecords.tags;
 
 import com.jswiff.io.InputBitStream;
 import com.jswiff.swfrecords.Shape;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -36,6 +37,9 @@ import java.io.IOException;
  * @since SWF 8.
  */
 public final class DefineFont3 extends DefineFont2 {
+
+  private static Logger logger = Logger.getLogger(DefineFont3.class);
+
   /**
    * @see DefineFont2#DefineFont2(int, String, Shape[], char[])
    */
@@ -54,12 +58,31 @@ public final class DefineFont3 extends DefineFont2 {
       // skip offsetTable, UI32
       inStream.readBytes(numGlyphs * 4);
       // skip codeTableOffset, UI32
-//      inStream.readBytes(4);
+      inStream.readBytes(4);
     } else {
       // skip offsetTable, UI16
       inStream.readBytes(numGlyphs * 2);
-      // skip CodeTableOffset, UI16
-//      inStream.readBytes(2);
+      if (numGlyphs == 0) {
+        // We need to resolve an edge case for DefineFont3 now
+        // the codeTableOffset could be optional if the number
+        // of glyphs is zero. This happens when you want to
+        // refer to the system font in some specific way.
+        // since i couldnt find a proper rule to handle this
+        // exception we're going to do it the hard way.
+        // so if it turns out that this tag failed to parse
+        // due to an underflow and it has no glyphs we catch the read error.
+        // TODO improve
+
+        // skip CodeTableOffset, UI16
+        try {
+          inStream.readBytes(2);
+        } catch (IOException e) {
+          logger.debug("DefineFont3 edge case caught.");
+        }
+      } else {
+        // skip CodeTableOffset, UI16
+        inStream.readBytes(2);
+      }
     }
   }
 
