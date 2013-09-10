@@ -38,17 +38,16 @@ public class SetPropertyOperation extends AbstractOperation {
 			indexValue = GetPropertyOperation.properties[((StackValue)index).getIntValue()];
 		}
 		
-		return 
-			new StringBuffer()
-			.append(CodeUtil.getIndent(level))
-			.append("setProperty(")
-			.append(target.getStringValue(level))
-			.append(",")
-			.append(indexValue)
-			.append(",")
-			.append(value.getStringValue(level))
-			.append(")")
-			.toString();
+		StringBuilder buf = new StringBuilder();
+		buf.append(CodeUtil.getIndent(level));
+		buf.append("setProperty(");
+		buf.append(target.getStringValue(level));
+		buf.append(", '");
+		buf.append(indexValue); // As per tests this always has to be a string, though AS2 allows pure `_x` too, but we generated JS, so we make it `'_x'`.
+		buf.append("' ,");
+		buf.append(value.getStringValue(level));
+		buf.append(")");
+		return buf.toString();
 
 	}
 

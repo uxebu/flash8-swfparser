@@ -59,8 +59,8 @@ import com.jswiff.swfrecords.actions.StackValue;
 public class GetPropertyOperation extends AbstractOperation {
 	
 	public static String[] properties = new String[] {
-		"_X",
-		"_Y",
+		"_x",
+		"_y",
 		"_xscale",
 		"_yscale",
 		"_currentframe",
@@ -109,9 +109,9 @@ public class GetPropertyOperation extends AbstractOperation {
 		return new StringBuffer()
 		.append("getProperty(")
 		.append(target.getStringValue(level))
-		.append(",")
+		.append(", '")
 		.append(indexValue)
-		.append(")")
+		.append("')")
 		.toString();
 	}
 	
