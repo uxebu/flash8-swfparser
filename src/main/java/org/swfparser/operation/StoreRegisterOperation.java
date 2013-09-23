@@ -85,7 +85,7 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 		String val = op.getStringValue(0); // pass 0 as val shouldn't be indented
 			
 		return 	CodeUtil.getIndent(level)
-			+/*"var "+*/
+			+"var "+
 			"__R"
 			+registerNumber
 			+" = "
