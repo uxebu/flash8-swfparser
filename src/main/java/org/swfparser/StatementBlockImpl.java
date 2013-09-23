@@ -1147,11 +1147,12 @@ public class StatementBlockImpl implements StatementBlock {
 							registerValue = new NullStackValue();
 						}
 					} else {
-						logger.error("Reference to register #"+stackValue.getRegisterNumber()+", but registers size is "+context.getRegisters().size()+". Pushing undefined.");
-						registerValue = new UndefinedStackValue();
+						logger.error("Reference to register #"+stackValue.getRegisterNumber()+", but registers size is "+context.getRegisters().size()+". Pushing undefined. (Fixed by breaking out here, to be verified!!!) This error causes a subsequent error POPing");
+						//registerValue = new UndefinedStackValue();
+                        break;
 					}
-							
-					logger.debug("V:"+stackValue+" => "+registerValue);
+
+                    logger.debug("V:"+stackValue+" => "+registerValue);
 					stack.push(registerValue);
                     // Let's only do this for "simple" stack values
                     // Without it we would get all DefinedFunction2 parameters wrapped in an `eval`.

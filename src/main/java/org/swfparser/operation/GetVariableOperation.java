@@ -28,7 +28,9 @@ public class GetVariableOperation extends UnaryOperation implements BooleanOpera
 	@Override
 	public String getStringValue(int level) {
 		String variableName;
-		if (op instanceof StackValue && StackValue.TYPE_STRING==((StackValue)op).getType()) {
+        if (op instanceof StackValue && StackValue.TYPE_UNDEFINED == ((StackValue)op).getType()) {
+            variableName = "undefined";
+        } else if (op instanceof StackValue && StackValue.TYPE_STRING==((StackValue)op).getType()) {
             // e.g. `eval("<anything>")`
             String stringValue = ((StackValue)op).getString();
             if (stringValue.matches("[a-zA-Z_][a-zA-Z0-9_]*") &&
