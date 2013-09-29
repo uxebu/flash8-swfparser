@@ -5,7 +5,7 @@ import com.jswiff.swfrecords.actions.ActionBlockReader;
 import com.jswiff.swfrecords.tags.DefineButton2;
 import com.uxebu.swfparser.dump.actions.ButtonCondActionFlag;
 import com.uxebu.swfparser.dump.actions.ButtonCondActionFlagMapper;
-import com.uxebu.swfparser.dump.layout.LayoutManager;
+import com.uxebu.swfparser.dump.output.FileWriter;
 import org.swfparser.ActionBlockContext;
 import org.swfparser.CodeUtil;
 import org.swfparser.ExecutionContext;
@@ -19,12 +19,12 @@ import java.util.List;
 
 public class DefineButton2Generator implements CodeGenerator
 {
-    private LayoutManager layoutManager;
+    private FileWriter fileWriter;
     private DefineButton2 defineButton2;
 
-    public DefineButton2Generator(LayoutManager layoutManager)
+    public DefineButton2Generator(FileWriter fileWriter)
     {
-        this.layoutManager = layoutManager;
+        this.fileWriter = fileWriter;
     }
 
     public void generate(ActionBlockContext context)
@@ -85,7 +85,7 @@ public class DefineButton2Generator implements CodeGenerator
 
         for (ButtonCondActionFlag buttonCondActionFlag : mapper.map())
         {
-            layoutManager.addButton(defineButton2.getCharacterId(), buttonCondActionFlag, sourceCode.toString());
+            fileWriter.addButton(defineButton2.getCharacterId(), buttonCondActionFlag, sourceCode.toString());
         }
     }
 }

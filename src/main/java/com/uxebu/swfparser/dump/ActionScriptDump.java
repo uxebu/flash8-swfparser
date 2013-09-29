@@ -22,7 +22,7 @@ import com.uxebu.swfparser.dump.generators.DoActionGenerator;
 import com.uxebu.swfparser.dump.generators.DoRootMovieActionGenerator;
 import com.uxebu.swfparser.dump.generators.DoInitActionGenerator;
 import com.uxebu.swfparser.dump.generators.PlaceObject2Generator;
-import com.uxebu.swfparser.dump.layout.LayoutManager;
+import com.uxebu.swfparser.dump.output.FileWriter;
 import org.apache.log4j.Logger;
 import org.swfparser.ActionBlockContext;
 
@@ -33,30 +33,30 @@ public class ActionScriptDump
 {
     private static Logger logger = Logger.getLogger(ActionScriptDump.class);
     protected SWFDocument doc;
-    protected LayoutManager layoutManager;
+    protected FileWriter fileWriter;
 
-    public ActionScriptDump(LayoutManager layoutManager, AssetManager assetManager, String fileName)
+    public ActionScriptDump(FileWriter fileWriter, AssetManager assetManager, String fileName)
     {
-        this(layoutManager, assetManager.getSWFFile(fileName));
+        this(fileWriter, assetManager.getSWFFile(fileName));
     }
 
-    public ActionScriptDump(LayoutManager layoutManager, SWFDocument swfDocument)
+    public ActionScriptDump(FileWriter fileWriter, SWFDocument swfDocument)
     {
-        this.layoutManager = layoutManager;
+        this.fileWriter = fileWriter;
         this.doc = swfDocument;
     }
 
     public static void main(String[] args) {
-        LayoutManager layoutManager = new LayoutManager(System.getProperty("output", "as2"));
+        FileWriter fileWriter = new FileWriter(System.getProperty("output", "as2"));
         File inputFile = new File(args[0]);
         AssetManager assetManager = new AssetManager(inputFile.getParent());
-        new ActionScriptDump(layoutManager, assetManager.getSWFFile(inputFile.getName())).process();
+        new ActionScriptDump(fileWriter, assetManager.getSWFFile(inputFile.getName())).process();
     }
 
     public void process()
     {
         List<Tag> tags = doc.getTags();
-        ActionBlockContext context = new ActionBlockContext(layoutManager);
+        ActionBlockContext context = new ActionBlockContext(fileWriter);
         context.setDocument(doc);
         processTags(context, tags);
     }
@@ -79,7 +79,7 @@ public class ActionScriptDump
                 DefineSprite defineSprite = (DefineSprite) context.getTag();
 
                 List<Tag> controlTags = defineSprite.getControlTags();
-                ActionBlockContext newContext = new ActionBlockContext(layoutManager);
+                ActionBlockContext newContext = new ActionBlockContext(fileWriter);
                 newContext.setParentContext(context);
                 //newContext.setFrameNum(context.getFrameNum());
                 newContext.setDocument(context.getDocument());
@@ -93,7 +93,7 @@ public class ActionScriptDump
     {
         if (context.getTag() instanceof PlaceObject2)
         {
-            CodeGenerator generator = new PlaceObject2Generator(layoutManager);
+            CodeGenerator generator = new PlaceObject2Generator(fileWriter);
             generator.generate(context);
         }
     }
@@ -102,7 +102,7 @@ public class ActionScriptDump
     {
         if (context.getTag() instanceof DoInitAction)
         {
-            CodeGenerator generator = new DoInitActionGenerator(layoutManager);
+            CodeGenerator generator = new DoInitActionGenerator(fileWriter);
             generator.generate(context);
         }
     }
@@ -123,11 +123,11 @@ public class ActionScriptDump
 
             if (context.getParentContext() != null)
             {
-                generator = new DoActionGenerator(layoutManager);
+                generator = new DoActionGenerator(fileWriter);
             }
             else
             {
-                generator = new DoRootMovieActionGenerator(layoutManager);
+                generator = new DoRootMovieActionGenerator(fileWriter);
             }
 
             generator.generate(context);
@@ -139,7 +139,7 @@ public class ActionScriptDump
     {
         if (context.getTag() instanceof DefineButton2)
         {
-            CodeGenerator generator = new DefineButton2Generator(layoutManager);
+            CodeGenerator generator = new DefineButton2Generator(fileWriter);
             generator.generate(context);
         }
     }
@@ -193,7 +193,7 @@ public class ActionScriptDump
             if (context.getParentContext().getTag() instanceof DefineSprite)
             {
                 int characterId = ((DefineSprite) context.getParentContext().getTag()).getCharacterId();
-                layoutManager.addSprite(characterId, context.getFrameNum(), block.toString());
+                fileWriter.addSprite(characterId, context.getFrameNum(), block.toString());
             }
         }
     }

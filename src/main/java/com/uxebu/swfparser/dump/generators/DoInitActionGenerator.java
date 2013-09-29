@@ -1,10 +1,8 @@
 package com.uxebu.swfparser.dump.generators;
 
 import com.jswiff.swfrecords.actions.ActionBlockReader;
-import com.jswiff.swfrecords.tags.DefineSprite;
-import com.jswiff.swfrecords.tags.DoAction;
 import com.jswiff.swfrecords.tags.DoInitAction;
-import com.uxebu.swfparser.dump.layout.LayoutManager;
+import com.uxebu.swfparser.dump.output.FileWriter;
 import org.swfparser.ActionBlockContext;
 import org.swfparser.CodeUtil;
 import org.swfparser.ExecutionContext;
@@ -15,15 +13,14 @@ import org.swfparser.operation.ByteCodeOperation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class DoInitActionGenerator implements CodeGenerator
 {
-    private LayoutManager layoutManager;
+    private FileWriter fileWriter;
 
-    public DoInitActionGenerator(LayoutManager layoutManager)
+    public DoInitActionGenerator(FileWriter fileWriter)
     {
-        this.layoutManager = layoutManager;
+        this.fileWriter = fileWriter;
     }
 
     @Override
@@ -71,7 +68,7 @@ public class DoInitActionGenerator implements CodeGenerator
 
         if (operations.size() > 0)
         {
-            layoutManager.addInitClip(((DoInitAction) context.getTag()).getSpriteId(), block.toString());
+            fileWriter.addInitClip(((DoInitAction) context.getTag()).getSpriteId(), block.toString());
         }
     }
 }

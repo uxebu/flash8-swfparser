@@ -1,9 +1,8 @@
 package com.uxebu.swfparser.dump.generators;
 
 import com.jswiff.swfrecords.actions.ActionBlockReader;
-import com.jswiff.swfrecords.tags.DefineSprite;
 import com.jswiff.swfrecords.tags.DoAction;
-import com.uxebu.swfparser.dump.layout.LayoutManager;
+import com.uxebu.swfparser.dump.output.FileWriter;
 import org.swfparser.ActionBlockContext;
 import org.swfparser.CodeUtil;
 import org.swfparser.ExecutionContext;
@@ -17,11 +16,11 @@ import java.util.List;
 
 public class DoRootMovieActionGenerator implements CodeGenerator
 {
-    private LayoutManager layoutManager;
+    private FileWriter fileWriter;
 
-    public DoRootMovieActionGenerator(LayoutManager layoutManager)
+    public DoRootMovieActionGenerator(FileWriter fileWriter)
     {
-        this.layoutManager = layoutManager;
+        this.fileWriter = fileWriter;
     }
 
     @Override
@@ -69,7 +68,7 @@ public class DoRootMovieActionGenerator implements CodeGenerator
 
         if (operations.size() > 0 && context.getParentContext() == null)
         {
-            layoutManager.addRootMovie(context.getFrameNum(), block.toString());
+            fileWriter.addRootMovie(context.getFrameNum(), block.toString());
         }
     }
 }

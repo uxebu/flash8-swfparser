@@ -1,9 +1,7 @@
 package com.uxebu.swfparser.dump;
 
 import com.uxebu.swfparser.dump.assets.AssetManager;
-import com.uxebu.swfparser.dump.layout.LayoutManager;
-
-import java.io.File;
+import com.uxebu.swfparser.dump.output.FileWriter;
 
 public class ActionScriptBatchDump
 {
@@ -46,9 +44,9 @@ public class ActionScriptBatchDump
 
             try
             {
-                LayoutManager layoutManager = new LayoutManager(fileOutputDirectory);
+                FileWriter fileWriter = new FileWriter(fileOutputDirectory);
 
-                ActionScriptDump swfActionScript = new ActionScriptDump(layoutManager, assetManager, fileName);
+                ActionScriptDump swfActionScript = new ActionScriptDump(fileWriter, assetManager, fileName);
                 swfActionScript.process();
             }
             catch (Exception e)
