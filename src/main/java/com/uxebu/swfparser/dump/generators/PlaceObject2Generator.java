@@ -7,7 +7,7 @@ import com.jswiff.swfrecords.tags.DefineSprite;
 import com.jswiff.swfrecords.tags.PlaceObject2;
 import com.uxebu.swfparser.dump.actions.ClipActionFlag;
 import com.uxebu.swfparser.dump.actions.ClipActionFlagMapper;
-import com.uxebu.swfparser.dump.output.FileWriter;
+import com.uxebu.swfparser.dump.output.Writer;
 import org.swfparser.ActionBlockContext;
 import org.swfparser.CodeUtil;
 import org.swfparser.ExecutionContext;
@@ -21,13 +21,13 @@ import java.util.List;
 
 public class PlaceObject2Generator implements CodeGenerator
 {
-    private FileWriter fileWriter;
+    private Writer writer;
     private PlaceObject2 placeObject2;
     private int frameNo;
 
-    public PlaceObject2Generator(FileWriter fileWriter)
+    public PlaceObject2Generator(Writer writer)
     {
-        this.fileWriter = fileWriter;
+        this.writer = writer;
     }
 
     @Override
@@ -99,11 +99,11 @@ public class PlaceObject2Generator implements CodeGenerator
                 if (context.getParentContext() != null && context.getParentContext().getTag() instanceof DefineSprite)
                 {
                     DefineSprite parentTag = (DefineSprite) context.getParentContext().getTag();
-                    fileWriter.addSpriteClipAction(parentTag.getCharacterId(), frameNo, placeObject2.getDepth(), flag, block.toString());
+                    writer.addSpriteClipAction(parentTag.getCharacterId(), frameNo, placeObject2.getDepth(), flag, block.toString());
                 }
                 else
                 {
-                    fileWriter.addRootMovieClipAction(frameNo, placeObject2.getDepth(), flag, block.toString());
+                    writer.addRootMovieClipAction(frameNo, placeObject2.getDepth(), flag, block.toString());
                 }
             }
         }

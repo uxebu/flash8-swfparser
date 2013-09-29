@@ -18,7 +18,7 @@ import com.jswiff.swfrecords.tags.DefinitionTag;
 import com.jswiff.swfrecords.tags.TagConstants;
 import com.uxebu.swfparser.dump.actions.ButtonCondActionFlagMapper;
 import com.uxebu.swfparser.dump.actions.ButtonCondActionFlag;
-import com.uxebu.swfparser.dump.output.FileWriter;
+import com.uxebu.swfparser.dump.output.Writer;
 
 public class ActionBlockContext extends TagContext
 {
@@ -32,11 +32,11 @@ public class ActionBlockContext extends TagContext
      * Action block number inside tag (for DEFINE_BUTTON_2, PLACE_OBJECT_2, PLACE_OBJECT_3)
      */
     private int actionBlockNum = NO_ACTION_BLOCK_NUM;
-    private FileWriter fileWriter;
+    private Writer writer;
 
-    public ActionBlockContext(FileWriter fileWriter)
+    public ActionBlockContext(Writer writer1)
     {
-        this.fileWriter = fileWriter;
+        this.writer = writer1;
     }
 
     public ActionBlockContext getParentContext()

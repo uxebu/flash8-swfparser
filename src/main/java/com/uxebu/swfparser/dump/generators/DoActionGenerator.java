@@ -4,6 +4,7 @@ import com.jswiff.swfrecords.actions.ActionBlockReader;
 import com.jswiff.swfrecords.tags.DefineSprite;
 import com.jswiff.swfrecords.tags.DoAction;
 import com.uxebu.swfparser.dump.output.FileWriter;
+import com.uxebu.swfparser.dump.output.Writer;
 import org.swfparser.ActionBlockContext;
 import org.swfparser.CodeUtil;
 import org.swfparser.ExecutionContext;
@@ -17,11 +18,11 @@ import java.util.List;
 
 public class DoActionGenerator implements CodeGenerator
 {
-    private FileWriter fileWriter;
+    private Writer writer;
 
-    public DoActionGenerator(FileWriter fileWriter)
+    public DoActionGenerator(Writer writer)
     {
-        this.fileWriter = fileWriter;
+        this.writer = writer;
     }
 
     @Override
@@ -72,7 +73,7 @@ public class DoActionGenerator implements CodeGenerator
             if (context.getParentContext().getTag() instanceof DefineSprite)
             {
                 int characterId = ((DefineSprite) context.getParentContext().getTag()).getCharacterId();
-                fileWriter.addSprite(characterId, context.getFrameNum(), block.toString());
+                writer.addSprite(characterId, context.getFrameNum(), block.toString());
             }
         }
     }

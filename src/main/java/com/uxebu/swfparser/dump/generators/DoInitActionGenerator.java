@@ -2,7 +2,7 @@ package com.uxebu.swfparser.dump.generators;
 
 import com.jswiff.swfrecords.actions.ActionBlockReader;
 import com.jswiff.swfrecords.tags.DoInitAction;
-import com.uxebu.swfparser.dump.output.FileWriter;
+import com.uxebu.swfparser.dump.output.Writer;
 import org.swfparser.ActionBlockContext;
 import org.swfparser.CodeUtil;
 import org.swfparser.ExecutionContext;
@@ -16,11 +16,11 @@ import java.util.List;
 
 public class DoInitActionGenerator implements CodeGenerator
 {
-    private FileWriter fileWriter;
+    private Writer writer;
 
-    public DoInitActionGenerator(FileWriter fileWriter)
+    public DoInitActionGenerator(Writer writer)
     {
-        this.fileWriter = fileWriter;
+        this.writer = writer;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class DoInitActionGenerator implements CodeGenerator
 
         if (operations.size() > 0)
         {
-            fileWriter.addInitClip(((DoInitAction) context.getTag()).getSpriteId(), block.toString());
+            writer.addInitClip(((DoInitAction) context.getTag()).getSpriteId(), block.toString());
         }
     }
 }
