@@ -1,4 +1,4 @@
-package com.uxebu.swfparser.dump.layout;
+package com.uxebu.swfparser.dump.output;
 
 import com.uxebu.swfparser.dump.actions.ButtonCondActionFlag;
 import com.uxebu.swfparser.dump.actions.ClipActionFlag;
@@ -6,11 +6,11 @@ import com.uxebu.swfparser.dump.actions.ClipActionFlag;
 import java.io.File;
 import java.io.FileOutputStream;
 
-public class LayoutManager
+public class FileWriter
 {
     private String outputDirectory;
 
-    public LayoutManager(String outputDirectory)
+    public FileWriter(String outputDirectory)
     {
         this.outputDirectory = outputDirectory;
 
