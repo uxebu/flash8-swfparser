@@ -157,8 +157,8 @@ public class DefineFunction2Operation extends AbstractCompoundOperation {
         buf.append(StringUtils.join(params, ","));
 		buf.append(")")
 			.append("{\n");
-		
-		for (Operation op : operations) {
+
+        for (Operation op : operations) {
 //			logger.debug("DF2:OP::: "+op);
 			buf.append(op.getStringValue(level+1));
 			buf.append(CodeUtil.endOfStatement(op));

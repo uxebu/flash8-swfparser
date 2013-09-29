@@ -67,91 +67,6 @@ public class ActionScriptDump
 
         for (Tag tag : tags)
         {
-
-            /*
-
-			try {
-
-				switch (tag.getCode()) {
-
-				case TagConstants.SHOW_FRAME:
-					context.setFrameNum(context.getFrameNum()+1);
-					break;
-
-				case TagConstants.PLACE_OBJECT_2:
-					PlaceObject2 placeObject2 = (PlaceObject2) tag;
-					if (placeObject2.getClipActions() != null) {
-						List<ClipActionRecord> actionRecords = placeObject2.getClipActions().getClipActionRecords();
-						context.setActionBlockNum(0);
-						for (ClipActionRecord record : actionRecords) {
-							processActions(context, record.getActions());
-							context.setActionBlockNum(context.getActionBlockNum()+1);
-						}
-						context.setActionBlockNum(ActionBlockContext.NO_ACTION_BLOCK_NUM);
-					}
-					break;
-
-				case TagConstants.PLACE_OBJECT_3:
-					PlaceObject3 placeObject3 = (PlaceObject3) tag;
-					if (placeObject3.getClipActions() != null) {
-						List<ClipActionRecord> actionRecords = placeObject3.getClipActions().getClipActionRecords();
-						context.setActionBlockNum(0);
-						for (ClipActionRecord record : actionRecords) {
-							processActions(context, record.getActions());
-							context.setActionBlockNum(context.getActionBlockNum()+1);
-						}
-						context.setActionBlockNum(ActionBlockContext.NO_ACTION_BLOCK_NUM);
-					}
-					break;
-
-				case TagConstants.DEFINE_BUTTON:
-					DefineButton defineButton = (DefineButton) tag;
-					processActions(context, defineButton.getActions());
-					break;
-
-				case TagConstants.DEFINE_BUTTON_2:
-					DefineButton2 defineButton2 = (DefineButton2) tag;
-					ButtonCondAction[] buttonActions = defineButton2.getActions();
-					context.setActionBlockNum(0);
-					if (buttonActions != null) {
-						for (ButtonCondAction buttonAction : buttonActions) {
-							processActions(context, buttonAction.getActions());
-							context.setActionBlockNum(context.getActionBlockNum()+1);
-						}
-					}
-					context.setActionBlockNum(ActionBlockContext.NO_ACTION_BLOCK_NUM);
-					break;
-
-				case TagConstants.DO_ACTION:
-					DoAction doAction = (DoAction) tag;
-					processActions(context, doAction.getActions());
-					break;
-				case TagConstants.DO_INIT_ACTION:
-					DoInitAction doInitAction = (DoInitAction) tag;
-					processActions(context, doInitAction.getInitActions());
-					break;
-
-				case TagConstants.DEFINE_SPRITE:
-					DefineSprite sprite = (DefineSprite) tag;
-					List<Tag> controlTags = sprite.getControlTags();
-					ActionBlockContext newContext = new ActionBlockContext();
-					newContext.setParentContext(context);
-					newContext.setFrameNum(context.getFrameNum());
-					newContext.setDocument(context.getDocument());
-					processTags(controlTags, newContext);
-					break;
-
-				default:
-					// do nothing proceed to next tag
-					processNonActionTag(context);
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-			*/
-
             context.setTag(tag);
 
             generateShowFrame(context);
@@ -159,7 +74,6 @@ public class ActionScriptDump
             generateDoInitAction(context);
             generateDoAction(context);
             generateDoPlaceObject2(context);
-
             if (context.getTag() instanceof DefineSprite)
             {
                 DefineSprite defineSprite = (DefineSprite) context.getTag();
@@ -171,12 +85,8 @@ public class ActionScriptDump
                 newContext.setDocument(context.getDocument());
                 processTags(newContext, controlTags);
             }
-
             context.setTagNum(context.getTagNum() + 1);
-
-            // tag.
-        } // for
-
+        }
     }
 
     private void generateDoPlaceObject2(ActionBlockContext context)
