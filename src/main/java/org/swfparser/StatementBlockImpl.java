@@ -373,12 +373,15 @@ public class StatementBlockImpl implements StatementBlock {
 					logger.error("Empty stack and POP() found");
 					break;
 				} else {
-					boolean writePop = stack.peek() instanceof DualUse; 
+					boolean writePop = stack.peek() instanceof DualUse;
 					if (writePop && !statements.isEmpty()) {
 						// check last statement
 						// if it is StoreRegister than do NOT write this POP()
 						Operation lastStatement = statements.get(statements.size()-1);
-						writePop = lastStatement.getClass().getAnnotation(DoNotWritePop.class) == null;
+                        if (lastStatement instanceof StoreRegisterOperation) {
+//						writePop = lastStatement.getClass().getAnnotation(DoNotWritePop.class) == null;
+						    writePop = ((StoreRegisterOperation) lastStatement).getOp() != ((ExecutionStack) stack).peek();
+                        }
 					}
 					if (writePop) {
 						logger.debug("Writing POP()");
@@ -1148,8 +1151,8 @@ public class StatementBlockImpl implements StatementBlock {
 						}
 					} else {
 						logger.error("Reference to register #"+stackValue.getRegisterNumber()+", but registers size is "+context.getRegisters().size()+". Pushing undefined. (Fixed by breaking out here, to be verified!!!) This error causes a subsequent error POPing");
-						//registerValue = new UndefinedStackValue();
-                        break;
+						registerValue = new UndefinedStackValue();
+//                        break;
 					}
 
                     logger.debug("V:"+stackValue+" => "+registerValue);
