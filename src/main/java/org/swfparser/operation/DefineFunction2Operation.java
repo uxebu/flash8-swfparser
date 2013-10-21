@@ -47,17 +47,17 @@ public class DefineFunction2Operation extends AbstractCompoundOperation {
 		
 		List<Operation> registers = new AutoSizeArrayList<Operation>();
 
-		for (int j=0;j<parameters.length;j++) {
+		for (int j = 0; j < parameters.length; j++) {
 			RegisterParam registerParam = parameters[j];
 			logger.debug("registerParam = "+registerParam +" "+registerParam.getClass().getName());
-			registers.set(registerParam.getRegister(),new RegisterParamOperation(registerParam));
+			registers.set(registerParam.getRegister(), new RegisterParamOperation(registerParam));
 		}
 		
 		/////
-		logger.debug("name = "+action.getName());
-		logger.debug("registerCount = "+registerCount+",parameters.length="+parameters.length);
+		logger.debug("name = " + action.getName());
+		logger.debug("registerCount = " + registerCount + ", parameters.length=" + parameters.length);
 		
-		logger.debug("action.preloadsThis()="+action.preloadsThis());
+		logger.debug("action.preloadsThis()=" + action.preloadsThis());
 		int preloadVariableIndex = 1;
 		if (action.preloadsThis()) {
 			registers.set(preloadVariableIndex++, new StackValue("this"));
