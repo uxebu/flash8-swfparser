@@ -432,10 +432,10 @@ public class StackValue implements Serializable, Operation, BooleanOperation/*, 
 			result += ("integer: " + integerValue);
 			break;
 		case TYPE_CONSTANT_8:
-			result += ("c8[" + constant8 + "]");
+			result += ("constant8[" + constant8 + "]");
 			break;
 		case TYPE_CONSTANT_16:
-			result += ("c16[" + constant16 + "]");
+			result += ("constant16[" + constant16 + "]");
 			break;
 		case TYPE_UNDEFINED:
 			result += "undefined";
