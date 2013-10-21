@@ -103,7 +103,11 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 	public Operation getRightPart() {
 		return op;
 	}
-	
+
+    public int getRegisterNumber() {
+        return registerNumber;
+    }
+
 	public static class RegisterHandle implements Operation, BooleanOperation {
 
 		private int registerNumber;
