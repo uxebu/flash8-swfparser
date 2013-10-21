@@ -86,7 +86,7 @@ public class StatementBlockImpl implements StatementBlock {
 
 		boolean newLabelsWereBuilt = false;
 		if (isRootBlock) {
-			blockName = "$" ;
+			blockName = "$ (rootMovie)" ;
 			newLabelsWereBuilt=true;
 //			context.setPatternAnalyzer(new PatternAnalyzer(actions));
 			PatternAnalyzerEx patternAnalyzerEx = new PatternAnalyzerEx(new PatternContext(), actions);
@@ -105,15 +105,12 @@ public class StatementBlockImpl implements StatementBlock {
 		}
 		
 		// read all labels
-		logger.debug("");
-		logger.debug("");
-		logger.debug("");		
-		logger.debug("BLOCK START::: "+blockName+" ::: Total actions : "+actions.size()+" Stack size : "/*+stack.size()*/);
+		logger.debug("  :  :  :  BLOCK START  :  :  :   - blockName: " + blockName+", actions.size = "+actions.size());//+", Stack size : " + stack.size());
 		String regInfo="REGS:";
 		String labelInfo = newLabelsWereBuilt ? "LABELS BUILT:" : "LABELS INHERITED:";
 		int yui=1;
 		for (Operation op : context.getRegisters()) {
-			regInfo+=(yui++)+"=>"+op+",";
+			regInfo += (yui++) + " => " + op + ",";
 		}
 		if (context.getPatternAnalyzerEx()!=null) {
 			for (String lab : context.getPatternAnalyzerEx().getLabels().keySet()) {
@@ -122,9 +119,6 @@ public class StatementBlockImpl implements StatementBlock {
 		}
 		logger.debug(regInfo);
 		logger.debug(labelInfo);
-		logger.debug("");
-		logger.debug("");
-		logger.debug("");
 
 //		for (Action action : actions) {
 //			
@@ -157,7 +151,10 @@ public class StatementBlockImpl implements StatementBlock {
 				context.getMomentStack().push(moment);
 				
 				String label = action.getLabel();
-				logger.debug(actionFormat.sprintf(new Object[]{action.getCode(),ActionConstants.getActionName(action.getCode()),label!=null ? label : "[[[null]]]"}));
+				logger.debug(
+                        "=== " +
+                        ActionConstants.getActionName(action.getCode()) + " === " +
+                                (label != null ? label : " (label=null)"));
 				
 				int actionIndexShift=1;
 				if (context.getPatternAnalyzerEx()!=null && context.getPatternAnalyzerEx().getPatternByLabel(action.getLabel())!=null) {
@@ -180,7 +177,7 @@ public class StatementBlockImpl implements StatementBlock {
 				
 				actionIndex += actionIndexShift;
 				
-				logger.debug("@@@STACK="+context.getExecStack().size());
+				logger.debug("STACK, length = "+context.getExecStack().size() + ", values=" + context.getExecStack());
 			}
 		} catch (EmptyStackException e) {
 			e.printStackTrace();
@@ -239,24 +236,16 @@ public class StatementBlockImpl implements StatementBlock {
                 logger.debug(op.getStringValue(0)+endOfStatement+" // "+op.getClass().getName()+"\n");
 			}
 		}
-		
-		logger.debug("");
-		logger.debug("");
-		logger.debug("");
-		logger.debug("BLOCK FINISHED ::: "+blockName);
-		logger.debug("");
-		logger.debug("");
-		logger.debug("");
-
+		logger.debug("  :  :  :  BLOCK FINISHED  :  :  :   - blockName: " + blockName);
 	}
 
 	protected void checkStackInTheEndOfTheBlock(Map<Operation, Action> stackOperationToActionMap) {
 		logger.debug("Checking stack before writing statements...");
 		Stack<Operation> stack = context.getExecStack();
 		if (stack.isEmpty()) {
-			logger.debug("Stack is empty... OK");
+			logger.debug("STACK is empty ... OK");
 		} else {
-			logger.debug("Stack size is "+stack.size());
+			logger.debug("STACK length: " + stack.size());
 			for (Operation operation : stack) {
 				logger.debug("Checking "+operation+". Maps to action "+stackOperationToActionMap.get(operation));
 			}
@@ -354,10 +343,7 @@ public class StatementBlockImpl implements StatementBlock {
 			case ActionConstants.CONSTANT_POOL:
 				ConstantPool constantPool = (ConstantPool)action;
 				context.getConstants().addAll(constantPool.getConstants());
-				logger.debug("Loaded constants:"+context.getConstants().size());
-				for (String constant : context.getConstants()) {
-					logger.debug(constant);
-				}
+				logger.debug("Loaded constants, length: "+context.getConstants().size() + ", values: " + context.getConstants());
 				break;
 		
 			case ActionConstants.PUSH :
@@ -1124,20 +1110,20 @@ public class StatementBlockImpl implements StatementBlock {
 				case StackValue.TYPE_BOOLEAN :
 				case StackValue.TYPE_DOUBLE :
 				case StackValue.TYPE_INTEGER :
-					logger.debug("V:"+stackValue);
+					logger.debug("STACK, pushing: " + stackValue);
 					stack.push(stackValue);
 					break;
 					
 				case StackValue.TYPE_CONSTANT_8 :
 					int index8 = stackValue.getConstant8();
 					Operation constant8 = (context.getConstants().size() > index8) ? new StackValue(context.getConstants().get(index8)) : new UndefinedStackValue();
-					logger.debug("V:"+stackValue+" => "+constant8);
+					logger.debug("STACK, pushing: " + stackValue+" => " + constant8);
 					stack.push(constant8);
 					break;
 				case StackValue.TYPE_CONSTANT_16 :
 					int index16 = stackValue.getConstant16();
 					Operation constant16 = (context.getConstants().size() > index16) ? new StackValue(context.getConstants().get(index16)) : new UndefinedStackValue();
-					logger.debug("V:"+stackValue+" => "+constant16);
+					logger.debug("STACK, pushing: " + stackValue+" => " + constant16);
 					stack.push(constant16);
 					break;
 					
@@ -1155,12 +1141,14 @@ public class StatementBlockImpl implements StatementBlock {
 //                        break;
 					}
 
-                    logger.debug("V:"+stackValue+" => "+registerValue);
+                    logger.debug("STACK, pushing: " + stackValue+" => "+registerValue);
 					stack.push(registerValue);
                     // Let's only do this for "simple" stack values
                     // Without it we would get all DefinedFunction2 parameters wrapped in an `eval`.
                     if (registerValue instanceof StackValue) {
-                        stack.push(new GetVariableOperation(stack)); // This treats everything that is in a register as a variable, works in all tests I wrote, but that's all the proof I have (wk).
+                        GetVariableOperation item = new GetVariableOperation(stack);
+                        logger.debug("STACK, pushing: " + item);
+                        stack.push(item); // This treats everything that is in a register as a variable, works in all tests I wrote, but that's all the proof I have (wk).
                     }
 					break;
 					

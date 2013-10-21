@@ -36,9 +36,12 @@ public class DefineFunctionOperation extends AbstractCompoundOperation {
 		super(context);
 		this.defineFunction = defineFunction;
 		String functionName = defineFunction.getName();
-		logger.debug(functionName+"()");
-		logger.debug("params = "+defineFunction.getParameters().length);
-		logger.debug("code size = "+defineFunction.getCode());
+        String[] parameters = defineFunction.getParameters();
+        logger.debug(
+                "name: " + (functionName.equals("") ? "<anonymous>" : functionName) +
+                ", params:" + (parameters.length > 0 ? parameters : "none"));
+//		logger.debug("params = "+defineFunction.getParameters().length);
+//		logger.debug("code size = "+defineFunction.getCode());
 		
 		List<Action> actions = defineFunction.getBody().getActions();
 		

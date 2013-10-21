@@ -29,7 +29,7 @@ public class CallFunctionOperation extends AbstractOperation implements BooleanO
 		functionName = stack.pop();
 		int numArgs = ((StackValue)stack.pop()).getIntValue();
 		args = new ArrayList<Operation>(numArgs);
-		for (int j=0;j<numArgs;j++) {
+		for (int j = 0; j < numArgs; j++) {
 			args.add(stack.pop());
 		}
 	}
