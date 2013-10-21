@@ -51,6 +51,7 @@ public interface ExecutionContext {
 	 * @return
 	 */
 	public List<String> getConstants();
+    public void setConstants(List<String> constants);
 
 	/**
 	 * @return

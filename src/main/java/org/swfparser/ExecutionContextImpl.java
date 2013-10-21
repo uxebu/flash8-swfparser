@@ -49,9 +49,9 @@ public class ExecutionContextImpl implements ExecutionContext {
 		return constants;
 	}
 
-//	public void setConstants(List<String> constants) {
-//		this.constants = constants;
-//	}
+	public void setConstants(List<String> constants) {
+		this.constants = constants;
+	}
 	
 	public Stack<Action> getActionStack() {
 		return actionStack;
