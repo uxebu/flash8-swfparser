@@ -154,11 +154,11 @@ public abstract class AbstractCompoundOperation extends AbstractOperation {
 		// Handle only boolean operations
 		if (! (beforeStack.peek() instanceof BooleanOperation)) {
 //			throw new IllegalArgumentException("Not boolean: "+beforeStack.peek());
-			logger.error("Not boolean: "+beforeStack.peek());
+			logger.info("Not boolean: "+beforeStack.peek());
 		}
 		if (! (afterStack.peek() instanceof BooleanOperation)) {
 //			throw new IllegalArgumentException("Not boolean: "+afterStack.peek());
-			logger.error("Not boolean: "+afterStack.peek());
+			logger.info("Not boolean: "+afterStack.peek());
 		}
 		
 		logger.debug("Try to simplify if condition...");
