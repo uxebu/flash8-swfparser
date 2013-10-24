@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
+import org.swfparser.CodeUtil;
 import org.swfparser.Operation;
 
 // TODO: check implementation
@@ -30,10 +31,11 @@ public class ExtendsOperation extends AbstractOperation {
 	}
 
 	public String getStringValue(int level) {
-//		return subClass.getStringValue(level)+" extends "+superClass.getStringValue(level);
         String className = subClass.getStringValue(level);
         String superClassName = superClass.getStringValue(level);
-        return "Class({constructor: " + className + ", superClass: " + superClassName + "})";
+        StringBuffer buf = new StringBuffer();
+
+        return CodeUtil.getIndent(level) + "Class({constructor: " + className + ", superClass: " + superClassName + "})";
 	}
 
 	public List<Operation> getOperations() {
