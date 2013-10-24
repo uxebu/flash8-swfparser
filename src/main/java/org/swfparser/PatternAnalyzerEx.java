@@ -229,7 +229,7 @@ public class PatternAnalyzerEx {
 			int jumpPointer = context.getActionPointerMap().get( context.getLabels().get(action.getBranchLabel()) );
 			int ifOffset = actions.get(ifPointer).getOffset();
 			int jumpOffset = actions.get(jumpPointer).getOffset();
-			IfHandle ifHandle = new IfHandle((If)action,ifPointer,jumpPointer,ifOffset,jumpOffset);
+			IfHandle ifHandle = new IfHandle((If)action, ifPointer, jumpPointer, ifOffset, jumpOffset);
 			return analyzeIf(ifHandle);
 		} else {
 			throw new IllegalArgumentException("Invalid branch action "+action);
