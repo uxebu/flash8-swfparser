@@ -91,6 +91,10 @@ public abstract class Action implements Serializable {
     return label;
   }
 
+  public boolean hasLabel() {
+    return label != null;
+  }
+
   /**
    * Returns this action record's offset within the action block this action
    * record is contained in (in bytes).

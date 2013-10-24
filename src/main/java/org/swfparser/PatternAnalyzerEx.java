@@ -65,7 +65,7 @@ public class PatternAnalyzerEx {
 	private boolean enumerateStarted = false;
 	private int enumeratePointer = -1;
 	
-	private static int intanceCounter = 0;
+	private static int instanceCounter = 0;
 	private static int labelCounter = 1;
 	
 	private int startPointer;
@@ -77,6 +77,7 @@ public class PatternAnalyzerEx {
 		this.actions = actions;
 		this.startPointer = 0;
 		this.endPointer = actions.size()-1;
+        logger.debug("startPointer = 0, endPointer (actions.size) = " + this.endPointer);
 		init();
 	}
 	
@@ -90,49 +91,46 @@ public class PatternAnalyzerEx {
 	}
 	
 	private void init() throws LabelsInitException {
-		intanceCounter++;
-		labelCounter=1;
-
+		instanceCounter++;
+		labelCounter = 1;
 		if (this.actions.isEmpty()) {
 			return;
 		}
-		
-		Action lastAction = this.actions.get(this.actions.size()-1); 
-		if (! (lastAction instanceof End) ) {
-			End end = new End();
-			end.setLabel(ActionBlock.LABEL_END);
-			end.setOffset(lastAction.getOffset()+lastAction.getSize());
-			this.actions.add(end); // add virtual End action
-		}
-		
+        appendEndActionIfNeeded();
 		// build labels
 		if (isRootBlock()) {
 			initLabels();
-			
 			checkLabels();
 		}
-		
 	}
-	
-	private void initLabels() {
-		logger.debug("Init...");
+
+    private void appendEndActionIfNeeded() {
+        Action lastAction = this.actions.get(this.actions.size()-1);
+        if (! (lastAction instanceof End) ) {
+            End end = new End();
+            end.setLabel(ActionBlock.LABEL_END);
+            end.setOffset(lastAction.getOffset()+lastAction.getSize());
+            this.actions.add(end); // add virtual End action
+        }
+    }
+
+    private void initLabels() {
+		logger.debug("in `initLabels()`");
 		int pointer = 0;
 		for (Action action : actions) {
 //			logger.debug("#init() action="+action+" label = "+action.getLabel());
-			if (action.getLabel() != null) {
+            if (action.hasLabel()) {
 				// nothing...
-			} else if (action instanceof Branch) {
+			} else if (action instanceof Branch) { // IF and JUMP actions extend `Branch`
 				action.setLabel(createLabel()); // set labels to all branch actions
 			} else if ((action instanceof SetTarget) || (action instanceof SetTarget2)) {
-				action.setLabel(createLabel("TT")); // set labels to all tellTarget() actions
+				action.setLabel(createLabel("TELL_TARGET")); // set labels to all tellTarget() actions
 			} else if (action instanceof Enumerate || action instanceof Enumerate2) {
-				action.setLabel(createLabel("E"));
+				action.setLabel(createLabel("ENUMERATE"));
 			}
-			
-			if (action.getLabel() != null) {
-				context.getLabels().put(action.getLabel(), action);
+			if (action.hasLabel()) {
+				context.getLabels().put(action.getLabel(), action); // Map `label => action`
 			}
-			
 			Assert.isTrue(!context.getActionPointerMap().containsKey(action));
 			context.getActionPointerMap().put(action, pointer);
 			pointer++;
@@ -146,23 +144,24 @@ public class PatternAnalyzerEx {
 	}
 
 	private static String createLabel() {
-		return "JL_"+intanceCounter+"_"+(labelCounter++);
+		return "JUMP_LABEL_"+ instanceCounter +"_"+(labelCounter++);
 	}
 	
 	private static String createLabel(String prefix) {
-		return prefix+"_"+intanceCounter+"_"+(labelCounter++);
+		return prefix+"_"+ instanceCounter +"_"+(labelCounter++);
 	}
 	
 	public void checkLabels() throws LabelsInitException {
 		Map<String,Action> labels = new HashMap<String, Action>();
 		Set<String> branchLabels = new HashSet<String>();
 		for (Action action : actions) {
-			if (action.getLabel()!=null) {
+			if (action.hasLabel()) {
 				labels.put(action.getLabel(), action);
 			}
 			if (action instanceof Branch) {
 				Branch branch = (Branch) action;
-				if (branch.getBranchLabel()!=null) {
+                boolean hasBranchLabel = branch.getBranchLabel() != null;
+                if (hasBranchLabel) {
 					branchLabels.add(branch.getBranchLabel());
 				}
 			}
