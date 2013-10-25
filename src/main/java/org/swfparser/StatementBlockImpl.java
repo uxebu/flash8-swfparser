@@ -597,7 +597,7 @@ public class StatementBlockImpl implements StatementBlock {
 
 			case ActionConstants.STORE_REGISTER:
 				op = new StoreRegisterOperation(context, ( StoreRegister ) action);
-				addStatement(op, action);
+				addStatement(op);
                 stack.pop();
                 Push pushAction = new Push();
                 StackValue stackValue = new StackValue();
