@@ -846,8 +846,7 @@ public class StatementBlockImpl implements StatementBlock {
 				
 				actionStatementmap.put(action, op);
 				statements.add(op);
-				checkStackAfterStatement();
-				
+				postProcessAfterStatement();
 			}
 		}
 	}
@@ -855,7 +854,7 @@ public class StatementBlockImpl implements StatementBlock {
 	private static int modifiedVarIndex = 1;
 	private static int modifiedRegIndex = 1000;
 	
-	protected void checkStackAfterStatement() {
+	protected void postProcessAfterStatement() {
 		Operation statement = statements.get(statements.size()-1);
 		logger.debug("Checking stack after "+statement);
 		Stack<Operation> stack = context.getExecStack();
