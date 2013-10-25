@@ -598,6 +598,10 @@ public class StatementBlockImpl implements StatementBlock {
 			case ActionConstants.STORE_REGISTER:
 				op = new StoreRegisterOperation(context, ( StoreRegister ) action);
 				addStatement(op);
+
+                // Push the variable into the register instead of the code.
+                // This used to break constructor definitions, where `__R1 = function(){}` is the constructor
+                // and `function(){}` had been pushed into the register, instead of `__R1`.
                 stack.pop();
                 Push pushAction = new Push();
                 StackValue stackValue = new StackValue();
