@@ -99,7 +99,10 @@ public class DefineFunctionOperation extends AbstractCompoundOperation {
 			.append("{\n");
 
 		for (Operation op : operations) {
-			buf.append(op.getStringValue(level+1)+CodeUtil.endOfStatement(op)+"\n");
+            String stringValue = op.getStringValue(level + 1);
+            if (!stringValue.isEmpty()) {
+                buf.append(stringValue +CodeUtil.endOfStatement(op)+"\n");
+            }
 		}
 		
 		buf.append(CodeUtil.getIndent(level));
