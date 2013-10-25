@@ -120,13 +120,13 @@ public class IfOperation extends AbstractCompoundOperation implements SkipOperat
 	}
 	
 	protected String getHeaderLine() {
-		return new StringBuffer()
-			.append(getLoopHeader())
-			.append(" (")
+        StringBuilder sourceCode = new StringBuilder();
+        sourceCode.append(getLoopHeader());
+        sourceCode.append(" (");
 //			.append(getInvertedString(condition,0))
-			.append(((BooleanOperation)condition).getInvertedOperation().getStringValue(0))
-			.append(") {")
-			.toString();
+        sourceCode.append(((BooleanOperation) condition).getInvertedOperation().getStringValue(0));
+        sourceCode.append(") {");
+	    return sourceCode.toString();
 	}
 	
 	protected String getFooterLine() {
@@ -134,25 +134,18 @@ public class IfOperation extends AbstractCompoundOperation implements SkipOperat
 	}
 
 	public String getStringValue(int level) {
-		
-
-//			logger.debug("Writing if with level "+level);
-			StringBuffer buf =  new StringBuffer()
-			.append(CodeUtil.getIndent(level))
-			.append(getHeaderLine())
-			.append("\n");
-			
-			for (Operation op : operations) {
-				buf
-					.append(op.getStringValue(level+1))
-					.append(CodeUtil.endOfStatement(op))
-					.append("\n");
-			}
-			
-			buf.append(CodeUtil.getIndent(level));
-			buf.append(getFooterLine());
-			
-			return buf.toString();
+        StringBuilder buf =  new StringBuilder();
+        buf.append(CodeUtil.getIndent(level));
+        buf.append(getHeaderLine());
+        buf.append("\n");
+        for (Operation op : operations) {
+            buf.append(op.getStringValue(level+1));
+            buf.append(CodeUtil.endOfStatement(op));
+            buf.append("\n");
+        }
+        buf.append(CodeUtil.getIndent(level));
+        buf.append(getFooterLine());
+        return buf.toString();
 //		} else {
 //			//
 //			// Skip if() if no operations inside
