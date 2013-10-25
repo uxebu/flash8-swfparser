@@ -11,7 +11,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,6 @@ import org.springframework.util.StringUtils;
 
 import org.apache.log4j.Logger;
 
-import org.swfparser.annotations.DoNotWritePop;
 import org.swfparser.annotations.NewAnalyzer;
 import org.swfparser.exception.StatementBlockException;
 import org.swfparser.operation.*;
@@ -107,14 +105,14 @@ public class StatementBlockImpl implements StatementBlock {
 		// read all labels
 		logger.debug("  :  :  :  BLOCK START  :  :  :   - blockName: " + blockName+", actions.size = "+actions.size());//+", Stack size : " + stack.size());
 		String regInfo="REGS:";
-		String labelInfo = newLabelsWereBuilt ? "LABELS BUILT:" : "LABELS INHERITED:";
+		String labelInfo = newLabelsWereBuilt ? "LABELS BUILT: " : "LABELS INHERITED: ";
 		int yui=1;
 		for (Operation op : context.getRegisters()) {
 			regInfo += (yui++) + " => " + op + ",";
 		}
 		if (context.getPatternAnalyzerEx()!=null) {
 			for (String lab : context.getPatternAnalyzerEx().getLabels().keySet()) {
-				labelInfo += lab + ",";
+				labelInfo += lab + ", ";
 			}
 		}
 		logger.debug(regInfo);
