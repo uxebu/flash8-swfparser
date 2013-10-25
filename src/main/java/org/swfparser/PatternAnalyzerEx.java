@@ -189,16 +189,14 @@ public class PatternAnalyzerEx {
 		while (pointer <= endPointer) {
 			int newPointer = pointer+1;
 			Action action = actions.get(pointer);
-			if (action .getLabel() != null && !context.getPatterns().containsKey(action.getLabel())) {
+			if (action.hasLabel() && !context.getPatterns().containsKey(action.getLabel())) {
 				if (action instanceof Branch) {
 					newPointer = analyzeBranch((Branch) action);
 				}
-				
 				if (action instanceof Enumerate || action instanceof Enumerate2) {
 					enumerateStarted = true;
 					enumeratePointer = pointer;
 				}
-				
 				if (action instanceof SetTarget) {
 					newPointer = analyzeSetTarget(action);
 				}
@@ -269,9 +267,9 @@ public class PatternAnalyzerEx {
 			// analyze jumps
 			PatternJumpsInfo info = getJumpsInfo(handle);
 			
-			logger.debug("Total.jumps before = "+info.getAllJumpsBefore().size());
-			logger.debug("Uncond.jumps after = "+info.getUnconditionalJumpsAfter().size()+",Cond.jump after="+info.getConditionalJumpsAfter().size());
-			logger.debug("Uncond.jumps end = "+info.getUnconditionalEndJumps().size()+",Cond.jump end="+info.getConditionalEndJumps().size());
+			logger.debug("Jump info: Total.jumps before = "+info.getAllJumpsBefore().size());
+			logger.debug("Jump info: Uncond.jumps after = "+info.getUnconditionalJumpsAfter().size()+",Cond.jump after="+info.getConditionalJumpsAfter().size());
+			logger.debug("Jump info: Uncond.jumps end = "+info.getUnconditionalEndJumps().size()+",Cond.jump end="+info.getConditionalEndJumps().size());
 			
 			if (info.getAllJumpsBefore().size() > 0) {
 				// get latest jump
@@ -774,7 +772,7 @@ public class PatternAnalyzerEx {
 	}
 	
 	private String getActionDebugString(Action action) {
-		String actionInfo="";
+		String actionInfo = "";
 		if (action instanceof Branch) {
 			Branch brnch = (Branch) action;
 			Action jumpDestination = context.getLabels().get(brnch.getBranchLabel());
