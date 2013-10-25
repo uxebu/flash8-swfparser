@@ -83,13 +83,14 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 
 	public String getStringValue(int level) {
 		String val = op.getStringValue(0); // pass 0 as val shouldn't be indented
-			
-		return 	CodeUtil.getIndent(level)
-			+"var "+
-			"__R"
-			+registerNumber
-			+" = "
-			+val;
+
+        String leftHandVariable = "__reg" + registerNumber;
+        if (leftHandVariable.equals(val)) {
+            // Don't render 'var __reg0 = __reg0;'
+            return "";
+        } else {
+            return CodeUtil.getIndent(level) + "var " + leftHandVariable + " = " + val;
+        }
 	}
 	
 	public Operation getObject() {
