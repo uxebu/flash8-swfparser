@@ -21,7 +21,16 @@ public class ReturnOperation extends UnaryOperation {
 
 	@Override
 	public String getStringValue(int level) {
-		return CodeUtil.getIndent(level)+"return "+op.getStringValue(level);
+        StringBuilder buf = new StringBuilder();
+        buf.append(CodeUtil.getIndent(level));
+        buf.append("return");
+
+        String stringValue = op.getStringValue(level);
+        if (!stringValue.equals("undefined")) {
+            buf.append(" ");
+            buf.append(stringValue);
+        }
+        return buf.toString();
 	}
 
 }
