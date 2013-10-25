@@ -993,26 +993,36 @@ public class StatementBlockImpl implements StatementBlock {
 			}
 		}
 		
-		boolean inc = statement instanceof PostIncrementOperation;
-		boolean dec = statement instanceof PostDecrementOperation;
-		
+//		boolean inc = statement instanceof PostIncrementOperation;
+//		boolean dec = statement instanceof PostDecrementOperation;
+        if (!(statement instanceof StoreRegisterOperation)) {
+            return false;
+        }
+        Operation insideOp = ((StoreRegisterOperation) statement).getOp();
+        boolean inc = insideOp instanceof SimpleIncrementOperation;
+		boolean dec = insideOp instanceof SimpleDecrementOperation;
+
 		if (inc || dec) {
-			Operation incOperation = ((UnaryOperation)statement).getOp();
-			
+			Operation incOperation = ((UnaryOperation)insideOp).getOp();
+
 			if (stack.isEmpty() || !allStackOperations.contains(incOperation)) {
 				List<Operation> registerOperations = context.getRegisters();
-				if (!registerOperations.isEmpty() && registerOperations.get(0) instanceof RegisterHandle) {
-					RegisterHandle registerHandle = (RegisterHandle) registerOperations.get(0);
-					if (registerHandle.getUndelrlyingOp() instanceof SimpleIncrementOperation) {
-						SimpleIncrementOperation simpleIncrementOperation = (SimpleIncrementOperation) registerHandle.getUndelrlyingOp();
-						if (incOperation.equals(simpleIncrementOperation.getOp())) {
-							logger.debug("Simplified to " + (inc ? "++x" : "--x"));
-							// remove last statement and change register(0)
-							statements.remove(statements.size()-1);
-							statements.remove(registerHandle.getStoreRegisterOp());
-							context.getRegisters().set(0, inc ? new PreIncrementOperation(incOperation) : new PreDecrementOperation(incOperation));
-							return true;
-						}
+                int lastRegisterOperationIndex = registerOperations.size() - 1;
+                if (!registerOperations.isEmpty() && registerOperations.get(lastRegisterOperationIndex) instanceof RegisterHandle) {
+					RegisterHandle registerHandle = (RegisterHandle) registerOperations.get(lastRegisterOperationIndex);
+					if (registerHandle.getUndelrlyingOp() instanceof SimpleIncrementOperation || registerHandle.getUndelrlyingOp() instanceof SimpleDecrementOperation) {
+//						SimpleIncrementOperation simpleIncrementOperation = (SimpleIncrementOperation) registerHandle.getUndelrlyingOp();
+//						if (incOperation.equals(simpleIncrementOperation.getOp())) {
+// we might need to check this too
+                        logger.debug("Simplified to " + (inc ? "++x" : "--x"));
+                        statements.remove(statements.size() - 1);
+                        // Replace the thing on the stack with the `--x`
+                        stack.pop();
+                        stack.push(inc ? new PreIncrementOperation(incOperation) : new PreDecrementOperation(incOperation));
+                        // Store the `x` in the register.
+                        int registerNumber = ((StoreRegisterOperation) statement).getRegisterNumber();
+                        context.getRegisters().set(registerNumber, incOperation);
+                        return true;
 					}
 				}
 			}
