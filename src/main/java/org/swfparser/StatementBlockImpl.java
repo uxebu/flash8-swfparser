@@ -258,23 +258,23 @@ public class StatementBlockImpl implements StatementBlock {
 		Stack<Operation> stack = context.getExecStack();
 		
 		if (branchPatternClass.equals( SwitchPattern.class )) {
-			addStatement( new SwitchOperation(context, (SwitchPattern) branchPattern), action);
+			addStatement( new SwitchOperation(context, (SwitchPattern) branchPattern));
 		}
 		
 		if (branchPatternClass.equals( TellTargetPattern.class )) {
 			if (action instanceof SetTarget) {
 				SetTarget setTarget = (SetTarget) action;
-				addStatement( new SetTargetOperation(stack,context,((TellTargetPattern)branchPattern).getActions(),setTarget), action );
+				addStatement( new SetTargetOperation(stack,context,((TellTargetPattern)branchPattern).getActions(),setTarget));
 			} else if (action instanceof SetTarget2) {
 				SetTarget2 setTarget = (SetTarget2) action;
-				addStatement( new SetTarget2Operation(stack,context,((TellTargetPattern)branchPattern).getActions(),setTarget), action );
+				addStatement( new SetTarget2Operation(stack,context,((TellTargetPattern)branchPattern).getActions(),setTarget));
 			}
 			return;
 		}
 		
 		if (branchPatternClass.equals( WhilePattern.class )) {
 			Operation op = new WhileOperation(stack,((WhilePattern)branchPattern).getActions(),context);
-			addStatement(op, action);
+			addStatement(op);
 			return;
 		}
 		
@@ -282,22 +282,22 @@ public class StatementBlockImpl implements StatementBlock {
 			canAddStatements = true;
 			Operation op = new DoWhileOperation(stack,((DoWhilePattern)branchPattern).getActions(),context);
 			logger.debug("Adding "+op+" to statement");
-			addStatement(op, action);
+			addStatement(op);
 			return;
 		}
 		
 		if (branchPatternClass.equals( IfElsePattern.class )) {
 			Operation op = new IfElseOperation(stack,context,((IfElsePattern)branchPattern).getIfActions(),((IfElsePattern)branchPattern).getElseActions());
-			addStatement(op, action);
+			addStatement(op);
 			return;
 		}
 		
 		if (branchPatternClass.equals( ContinuePattern.class )) {
-			addStatement(new SimpleOperation("continue"), action);
+			addStatement(new SimpleOperation("continue"));
 			return;
 		}
 		if (branchPatternClass.equals( BreakPattern.class )) {
-			addStatement(new SimpleOperation("break"), action);
+			addStatement(new SimpleOperation("break"));
 			return;
 		}
 		
@@ -315,7 +315,7 @@ public class StatementBlockImpl implements StatementBlock {
 		}
 		
 		if (branchPatternClass.equals( ForInPattern.class )) {
-			addStatement(new ForInOperation(context,((ForInPattern)branchPattern).getActions(),((ForInPattern)branchPattern).getVarActions()), action);
+			addStatement(new ForInOperation(context,((ForInPattern)branchPattern).getActions(),((ForInPattern)branchPattern).getVarActions()));
 			
 			return;
 		}
@@ -325,7 +325,7 @@ public class StatementBlockImpl implements StatementBlock {
 		//
 		if (branchPatternClass.equals( IfPattern.class )) {
 			Operation op = new IfOperation(stack,((IfPattern)branchPattern).getActions(),context);
-			addStatement(op, action);
+			addStatement(op);
 			return;
 		}
 		
@@ -370,7 +370,7 @@ public class StatementBlockImpl implements StatementBlock {
 					if (writePop) {
 						logger.debug("Writing POP()");
 						((DualUse)stack.peek()).markAsStatement();
-						addStatement(stack.pop(),action);
+						addStatement(stack.pop());
 					} else {
 						logger.debug("Skipping POP()");
 						stack.pop();
@@ -388,12 +388,12 @@ public class StatementBlockImpl implements StatementBlock {
 			
 			case ActionConstants.DEFINE_LOCAL :
 				op = new DefineLocalOperation(stack);
-				addStatement(op, action);
+				addStatement(op);
 				break;
 
 			case ActionConstants.DEFINE_LOCAL_2 :
 				op = new DefineLocal2Operation(stack);
-				addStatement(op, action);
+				addStatement(op);
 				break;
 				
 			//
@@ -402,7 +402,7 @@ public class StatementBlockImpl implements StatementBlock {
 				
 			
 			case ActionConstants.PREVIOUS_FRAME :
-				addStatement(new SimpleOperation("prevFrame()"), action);
+				addStatement(new SimpleOperation("prevFrame()"));
 				break;
 			case ActionConstants.NEXT_FRAME:
 				stack.push(new SimpleOperation("nextFrame()"));
@@ -411,20 +411,20 @@ public class StatementBlockImpl implements StatementBlock {
 				if (!statements.isEmpty() && (statements.get(statements.size()-1) instanceof ActionAware)) {
 					((ActionAware)statements.get(statements.size()-1)).setAction(GotoFrameOperation.ACTION_PLAY);
 				} else {
-					addStatement(new SimpleOperation("play()"), action);
+					addStatement(new SimpleOperation("play()"));
 				}
 				break;
 			case ActionConstants.STOP :
-				addStatement(new SimpleOperation("stop()"), action);
+				addStatement(new SimpleOperation("stop()"));
 				break;	
 			case ActionConstants.STOP_SOUNDS:
-				addStatement(new SimpleOperation("stopAllSounds()"), action);
+				addStatement(new SimpleOperation("stopAllSounds()"));
 				break;
 			case ActionConstants.GET_TIME:
 				stack.push(new SimpleFunctionOperation("getTimer()"));
 				break;
             case ActionConstants.THROW:
-                addStatement(new ThrowOperation(stack), action);
+                addStatement(new ThrowOperation(stack));
                 break;
 
 			//
@@ -507,7 +507,7 @@ public class StatementBlockImpl implements StatementBlock {
 				
 			case ActionConstants.SET_MEMBER:
 				op = new SetMemberOperation(stack);
-				addStatement(op, action);
+				addStatement(op);
 				break;
 				
 				
@@ -515,7 +515,7 @@ public class StatementBlockImpl implements StatementBlock {
 				DefineFunction defineFunction = (DefineFunction)action;
 				op = new DefineFunctionOperation(stack,context,defineFunction);
 				if (StringUtils.hasText(defineFunction.getName())) {
-					addStatement(op, action); // function as statement
+					addStatement(op); // function as statement
 				} else {
 					stack.push(op); // function as operation, put it to stack
 				}
@@ -525,7 +525,7 @@ public class StatementBlockImpl implements StatementBlock {
 				DefineFunction2 defineFunction2 = (DefineFunction2)action;
 				op = new DefineFunction2Operation(stack,defineFunction2,context);
 				if (StringUtils.hasText(defineFunction2.getName())) {
-					addStatement(op, action); // function as statement
+					addStatement(op); // function as statement
 				} else {
 					stack.push(op); // function as operation, put it to stack
 				}
@@ -559,11 +559,11 @@ public class StatementBlockImpl implements StatementBlock {
 				throw new StatementBlockException("Should be handled by pattern: "+action);
 				
 			case ActionConstants.DELETE:	
-				addStatement(new DeleteOperation(stack), action);
+				addStatement(new DeleteOperation(stack));
                 stack.push(new TrueOperation()); // TODO should be the result of the DeleteOperation?
 				break;
 			case ActionConstants.DELETE_2:
-				addStatement(new Delete2Operation(stack), action);
+				addStatement(new Delete2Operation(stack));
 				break;
 				
 				
@@ -577,13 +577,13 @@ public class StatementBlockImpl implements StatementBlock {
 			
 			case ActionConstants.GET_URL:
 				op = new GetURLOperation(action);
-				addStatement(op, action); // ???
+				addStatement(op); // ???
 //				finishThisBlock = true;
 				break;
 			
 			case ActionConstants.GET_URL_2:
 				op = new GetURL2Operation(stack,(GetURL2)action);
-				addStatement(op, action); // ???
+				addStatement(op); // ???
 //				finishThisBlock = true;
 				break;
 				
@@ -592,7 +592,7 @@ public class StatementBlockImpl implements StatementBlock {
 
 			case ActionConstants.SET_VARIABLE:
 				op = new SetVariableOperation(context);
-				addStatement(op, action);
+				addStatement(op);
 				break;
 
 			case ActionConstants.STORE_REGISTER:
@@ -630,21 +630,21 @@ public class StatementBlockImpl implements StatementBlock {
 			case ActionConstants.GO_TO_FRAME:
 				op = new GotoFrameOperation((GoToFrame)action);
 //				stack.push(op);
-				addStatement(op, action);
+				addStatement(op);
 				break;
 				
 			case ActionConstants.GO_TO_FRAME_2:
 				op = new GotoFrame2Operation(stack,(GoToFrame2)action);
 //				stack.push(op);
-				addStatement(op, action);
+				addStatement(op);
 				break;
 				
 			case ActionConstants.GO_TO_LABEL:
-				addStatement(new GotoLabelOperation(stack,(GoToLabel)action), action);
+				addStatement(new GotoLabelOperation(stack,(GoToLabel)action));
 				break;
 				
 			case ActionConstants.TRACE:
-				addStatement( new TraceOperation(stack), action );
+				addStatement( new TraceOperation(stack));
 				break;
 				
 			case ActionConstants.RANDOM_NUMBER:
@@ -652,21 +652,21 @@ public class StatementBlockImpl implements StatementBlock {
 				stack.push(op);
 				break;
 			case ActionConstants.REMOVE_SPRITE:
-				addStatement(new RemoveMovieClipOperation(stack), action);
+				addStatement(new RemoveMovieClipOperation(stack));
 				break;
 			case ActionConstants.RETURN:
-				addStatement( new ReturnOperation(stack), action );
+				addStatement( new ReturnOperation(stack));
 				break;
 			case ActionConstants.SET_PROPERTY:
-				addStatement( new SetPropertyOperation(stack), action );
+				addStatement( new SetPropertyOperation(stack));
 				break;
 
 			case ActionConstants.START_DRAG:
-				addStatement(new StartDragOperation(stack), action);
+				addStatement(new StartDragOperation(stack));
 				break;
 				
 			case ActionConstants.END_DRAG:
-				addStatement(new SimpleOperation("stopDrag()"), action);
+				addStatement(new SimpleOperation("stopDrag()"));
 				break;
 				
 			case ActionConstants.STRING_GREATER:
@@ -695,11 +695,11 @@ public class StatementBlockImpl implements StatementBlock {
 				break;
 			
 			case ActionConstants.WITH:
-				addStatement( new WithOperation(stack,context,(With) action), action );
+				addStatement( new WithOperation(stack,context,(With) action));
 				break;
 				
 			case ActionConstants.TRY:
-				addStatement( new TryCatchOperation(stack,context,(Try) action), action );
+				addStatement( new TryCatchOperation(stack,context,(Try) action));
 				break;
 			
 			case ActionConstants.CAST_OP:
@@ -707,7 +707,7 @@ public class StatementBlockImpl implements StatementBlock {
 				break;
 
 			case ActionConstants.CLONE_SPRITE:
-				addStatement( new CloneSpriteOperation(stack), action );
+				addStatement( new CloneSpriteOperation(stack));
 				break;
 			
 			case ActionConstants.ENUMERATE:
@@ -715,10 +715,10 @@ public class StatementBlockImpl implements StatementBlock {
 				throw new StatementBlockException("ENUMERATE should be handled by pattern: "+action);
 
 			case ActionConstants.EXTENDS:
-				addStatement( new ExtendsOperation(stack), action );
+				addStatement( new ExtendsOperation(stack));
 				break;	
 			case ActionConstants.IMPLEMENTS_OP:
-				addStatement( new ImplementsOperation(stack), action );
+				addStatement( new ImplementsOperation(stack));
 				break;	
 			case ActionConstants.INSTANCE_OF:
 				stack.push( new InstanceOfOperation(stack) );
@@ -788,7 +788,7 @@ public class StatementBlockImpl implements StatementBlock {
 				stack.push(new StringLengthOperation(stack));
 				break;
 			case ActionConstants.TOGGLE_QUALITY:
-				addStatement(new SimpleOperation("toggleHighQuality()"), action);
+				addStatement(new SimpleOperation("toggleHighQuality()"));
 				break;
 			case ActionConstants.WAIT_FOR_FRAME:
 				WaitForFrame waitForFrame = (WaitForFrame) action;
@@ -798,7 +798,7 @@ public class StatementBlockImpl implements StatementBlock {
 				for (int j=1;j<=additionalActionShift;j++) {
 					skipActions.add(moment.getActions().get(actionIndex+j));
 				}
-				addStatement( new WaitForFrameOperation(stack,context,waitForFrame,skipActions), action );
+				addStatement( new WaitForFrameOperation(stack,context,waitForFrame,skipActions));
 				break;
 			case ActionConstants.WAIT_FOR_FRAME_2:
 				WaitForFrame2 waitForFrame2 = (WaitForFrame2) action;
@@ -808,11 +808,11 @@ public class StatementBlockImpl implements StatementBlock {
 				for (int j=1;j<=additionalActionShift;j++) {
 					skipActions.add(moment.getActions().get(actionIndex+j));
 				}
-				addStatement( new WaitForFrame2Operation(stack,context,waitForFrame2,skipActions), action );
+				addStatement( new WaitForFrame2Operation(stack,context,waitForFrame2,skipActions));
 				break;
 				
 			case ActionConstants.CALL:
-				addStatement( new CallOperation(stack), action );
+				addStatement( new CallOperation(stack));
 				break;
 
 			
@@ -831,18 +831,12 @@ public class StatementBlockImpl implements StatementBlock {
 		
 	}
 
-	private Map<Action,Operation> actionStatementmap = new HashMap<Action, Operation>(); 
-	
-	protected void addStatement(Operation op, Action action) {
+	protected void addStatement(Operation op) {
 		if (canAddStatements) {
-			if (!(op instanceof SkipOperation) || 
-					(op instanceof SkipOperation && !((SkipOperation)op).skip())) {
-				
+			if (!(op instanceof SkipOperation) || (op instanceof SkipOperation && !((SkipOperation)op).skip())) {
 				if (op instanceof OperationFactory) {
 					op = ((OperationFactory)op).getObject();
 				}
-				
-				actionStatementmap.put(action, op);
 				statements.add(op);
 				postProcessAfterStatement();
 			}
