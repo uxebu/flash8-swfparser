@@ -8,22 +8,17 @@
 package org.swfparser.operation;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
 
 import org.swfparser.AutoSizeArrayList;
-import org.swfparser.BooleanOperation;
 import org.swfparser.CodeUtil;
 import org.swfparser.ExecutionContext;
 import org.swfparser.Operation;
 import org.swfparser.PatternAnalyzerEx;
-import org.swfparser.Priority;
 import org.swfparser.annotations.NewAnalyzer;
 import org.swfparser.exception.StatementBlockException;
 import com.jswiff.swfrecords.RegisterParam;
@@ -50,7 +45,7 @@ public class DefineFunction2Operation extends AbstractCompoundOperation {
 		for (int j = 0; j < parameters.length; j++) {
 			RegisterParam registerParam = parameters[j];
 			logger.debug("registerParam = "+registerParam +" "+registerParam.getClass().getName());
-			registers.set(registerParam.getRegister(), new RegisterParamOperation(registerParam));
+			registers.set(registerParam.getRegister(), new FunctionParameterOperation(registerParam));
 		}
 		
 		/////
@@ -174,62 +169,7 @@ public class DefineFunction2Operation extends AbstractCompoundOperation {
 		return buf.toString();
 	}
 
-	private static class RegisterParamOperation implements Operation, BooleanOperation {
-
-		private RegisterParam registerParam;
-		
-		public RegisterParamOperation(RegisterParam registerParam) {
-			super();
-			this.registerParam = registerParam;
-		}
-
-		public int getArgsNumber() {
-			return 1;
-		}
-
-		public String getStringValue(int level) {
-			return registerParam.getParamName();
-		}
-
-		public int getPriority() {
-			return Priority.HIGHEST;
-		}
-
-		public List<Operation> getOperations() {
-			return Collections.EMPTY_LIST;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof RegisterParamOperation)) {
-				return false;
-			}
-			if (obj == this) {
-				return true;
-			}
-			
-			RegisterParamOperation otherOp = (RegisterParamOperation) obj;
-			return new EqualsBuilder()
-				.append(this.registerParam.getRegister(), otherOp.registerParam.getRegister())
-				.append(this.registerParam.getParamName(), otherOp.registerParam.getParamName())
-				.isEquals();
-		}
-		
-		@Override
-		public int hashCode() {
-			return new HashCodeBuilder()
-			.append(registerParam.getRegister())
-			.append(registerParam.getParamName())
-			.toHashCode();
-		}
-
-		public Operation getInvertedOperation() {
-			return new SimpleInvertedOperation(this);
-		}
-		
-	}
-	
-	@Override
+    @Override
 	public String toString() {
 		return "DefineFunction2("+thisFunction.getName()+")";
 	}
