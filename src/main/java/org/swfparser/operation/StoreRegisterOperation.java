@@ -133,7 +133,7 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 		}
 
 		public String getStringValue(int level) {
-			return "__R"+registerNumber;
+			return "__reg"+registerNumber;
 		}
 
 		public int getPriority() {
