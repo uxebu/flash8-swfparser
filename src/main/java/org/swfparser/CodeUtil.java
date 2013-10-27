@@ -126,5 +126,13 @@ public class CodeUtil {
         return buf.toString();
     }
 
-
+    public static String finalizeRenderedOperation(String stringValue, String endOfStatement) {
+        StringBuilder buf = new StringBuilder();
+        if (!stringValue.isEmpty()) {
+            buf.append(stringValue);
+            buf.append(endOfStatement);
+            buf.append("\n");
+        }
+        return buf.toString();
+    }
 }
