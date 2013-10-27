@@ -55,30 +55,15 @@ public class CallMethodOperation extends AbstractOperation implements BooleanOpe
 	}
 
 	public String getStringValue(int level) {
-		StringBuffer buf = new StringBuffer();
+		StringBuilder buf = new StringBuilder();
 		if (isStatement) {
 			buf.append(CodeUtil.getIndent(level));
 		}
         String simpleValue = variable.getStringValue(level);
         buf.append(simpleValue.equals("super") ? "this.constructor.__super__" : simpleValue);
-		
-		if (methodName != null) {
-            boolean isMemberName = methodName instanceof StackValue && StackValue.TYPE_STRING == ((StackValue) methodName).getType();
-            boolean useVariableAsProperty = methodName instanceof GetVariableOperation;
-            if (useVariableAsProperty) {
-                buf.append("[");
-                buf.append(methodName.getStringValue(0));
-                buf.append("]");
-            } else if (isMemberName) {
-                buf.append(".");
-                buf.append(((StackValue) methodName).getString());
-            } else {
-                logger.error("Don't know how to handle this to call a method: " + methodName); // can this ever occur???
-            }
-		} else {
-            // Don't append any function name, probably an anonymous function
-		}
-		buf.append("(");
+
+        buf.append(CodeUtil.getMethodName(methodName));
+        buf.append("(");
 
 		// print arguments
 		int idx=0;
@@ -95,7 +80,7 @@ public class CallMethodOperation extends AbstractOperation implements BooleanOpe
 		return buf.toString();
 	}
 
-	public int getPriority() {
+    public int getPriority() {
 		return Priority.CALL_FUNCTION;
 	}
 

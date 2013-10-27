@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.util.StringUtils;
 
+import org.swfparser.CodeUtil;
 import org.swfparser.ExecutionContext;
 import org.swfparser.Operation;
 import com.jswiff.swfrecords.actions.StackValue;
@@ -60,7 +61,7 @@ public class NewObjectOperation extends AbstractOperation {
 		buf.append(newObjectName);
 		
 		if (StringUtils.hasText(getObjectMethod())) {
-			buf.append(".").append(getObjectMethod());
+			buf.append(getObjectMethod());
 		}
 		
 		buf.append("(");

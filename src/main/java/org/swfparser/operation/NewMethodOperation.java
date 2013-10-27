@@ -9,14 +9,12 @@ package org.swfparser.operation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
 import org.swfparser.CodeUtil;
 import org.swfparser.ExecutionContext;
 import org.swfparser.Operation;
-import com.jswiff.swfrecords.actions.StackValue;
 
 public class NewMethodOperation extends NewObjectOperation {
 
@@ -39,7 +37,7 @@ public class NewMethodOperation extends NewObjectOperation {
 	
 	@Override
 	protected String getObjectMethod() {
-		return CodeUtil.getSimpleValue(methodName, 0);
+		return CodeUtil.getMethodName(methodName);
 	}
 
 
