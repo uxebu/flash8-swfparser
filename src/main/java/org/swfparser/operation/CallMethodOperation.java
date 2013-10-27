@@ -62,17 +62,22 @@ public class CallMethodOperation extends AbstractOperation implements BooleanOpe
         String simpleValue = variable.getStringValue(level);
         buf.append(simpleValue.equals("super") ? "this.constructor.__super__" : simpleValue);
 		
-		String stringMethodName;
-		if (methodName!=null) {
-			stringMethodName = "."+((methodName instanceof StackValue 
-					&& StackValue.TYPE_STRING==((StackValue)methodName).getType()) 
-			? ((StackValue)methodName).getString() 
-			: methodName.getStringValue(level));
+		if (methodName != null) {
+            boolean isMemberName = methodName instanceof StackValue && StackValue.TYPE_STRING == ((StackValue) methodName).getType();
+            boolean useVariableAsProperty = methodName instanceof GetVariableOperation;
+            if (useVariableAsProperty) {
+                buf.append("[");
+                buf.append(methodName.getStringValue(0));
+                buf.append("]");
+            } else if (isMemberName) {
+                buf.append(".");
+                buf.append(((StackValue) methodName).getString());
+            } else {
+                logger.error("Don't know how to handle this to call a method: " + methodName); // can this ever occur???
+            }
 		} else {
-			stringMethodName="";
+            // Don't append any function name, probably an anonymous function
 		}
-		
-		buf.append(stringMethodName);
 		buf.append("(");
 
 		// print arguments
