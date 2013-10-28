@@ -341,11 +341,11 @@ public class StatementBlockImpl implements StatementBlock {
 			case ActionConstants.CONSTANT_POOL:
 				ConstantPool constantPool = (ConstantPool)action;
 				context.getConstants().addAll(constantPool.getConstants());
-				logger.debug("Loaded constants, length: "+context.getConstants().size() + ", values: " + context.getConstants());
+				logger.debug("Loaded constants, length: " + context.getConstants().size() + ", values: " + context.getConstants());
 				break;
 		
 			case ActionConstants.PUSH :
-				handlePush((Push)action,stack);
+				handlePush((Push)action, stack);
 				break;
 			
 			case ActionConstants.PUSH_DUPLICATE :
