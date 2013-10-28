@@ -159,9 +159,9 @@ public class StatementBlockImpl implements StatementBlock {
 					Pattern branchPattern = context.getPatternAnalyzerEx().getPatternByLabel(action.getLabel());
 					logger.debug("Branch pattern found: "+branchPattern);
 					handleByPattern(actionIndex, action);
-					actionIndexShift+=branchPattern.size();
+					actionIndexShift += branchPattern.size();
 				} else {
-					actionIndexShift+=handleByActionCode(action);
+					actionIndexShift += handleByActionCode(action);
 				}
 				
 				// map newly added operations to this action
