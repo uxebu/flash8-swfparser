@@ -30,6 +30,7 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 
 	private static Logger logger = Logger.getLogger(StoreRegisterOperation.class);
 	private int registerNumber;
+    private String varName;
 	private Operation returnOperation;
 	private RegisterHandle registerHandle;
 	private boolean skipOperation = false;
@@ -38,14 +39,30 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 		super(context.getExecStack().peek());
 		this.registerNumber = action.getNumber();
 		
-		logger.debug("Register number = "+this.registerNumber);
-		logger.debug("Adding register "+this.registerNumber+" = "+op);
-		this.registerHandle = new RegisterHandle(this.registerNumber, op, this);
-		context.getRegisters().set(this.registerNumber, this.registerHandle);
+		logger.debug("Register number = " + this.registerNumber);
+		logger.debug("Adding register " + this.registerNumber + " = " + op);
+        List<Operation> registers = context.getRegisters();
+        Operation registerOperation = null;
+        if (registers.size() > this.registerNumber) { // Obviously List is like a sparse array, if index 1 is set the size is 2.
+            registerOperation = registers.get(this.registerNumber);
+        }
+        if (registerOperation instanceof FunctionParameterOperation) {
+            // Is the operation a function parameter?
+            String varName = registerOperation.getStringValue(0);
+            this.varName = varName;
+            this.registerHandle = new RegisterHandle(varName, op, this);
+        } else if (registerOperation instanceof RegisterHandle && ((RegisterHandle) registerOperation).hasVarName()) {
+            // Does the registerOperation have a varName set, which means it used to be a function param, the case above.
+            this.varName = ((RegisterHandle) registerOperation).getVarName();
+            this.registerHandle = new RegisterHandle(varName, op, this);
+        } else {
+		    this.registerHandle = new RegisterHandle(this.registerNumber, op, this);
+        }
+        registers.set(this.registerNumber, this.registerHandle);
 		String regInfo="REGS:";
-		int i=1;
-		for (Operation op : context.getRegisters()) {
-			regInfo+=(i++)+"=>"+op+",";
+		int i = 1;
+		for (Operation op : registers) {
+			regInfo += (i++) + " => " + op + ", ";
 		}
 		logger.debug(regInfo);
 		
@@ -84,12 +101,16 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 	public String getStringValue(int level) {
 		String val = op.getStringValue(0); // pass 0 as val shouldn't be indented
 
-        String leftHandVariable = "__reg" + registerNumber;
-        if (leftHandVariable.equals(val)) {
-            // Don't render 'var __reg0 = __reg0;'
-            return "";
+        if (varName != null) {
+            return CodeUtil.getIndent(level) + varName + " = " + val;
         } else {
-            return CodeUtil.getIndent(level) + "var " + leftHandVariable + " = " + val;
+            String leftHandVariable = "__reg" + registerNumber;
+            if (leftHandVariable.equals(val)) {
+                // Don't render 'var __reg0 = __reg0;'
+                return "";
+            } else {
+                return CodeUtil.getIndent(level) + "var " + leftHandVariable + " = " + val;
+            }
         }
 	}
 	
@@ -112,6 +133,7 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 	public static class RegisterHandle implements Operation, BooleanOperation {
 
 		private int registerNumber;
+        private String varName;
 		private Operation undelrlyingOp;
 		private StoreRegisterOperation storeRegisterOp;
 		
@@ -127,14 +149,27 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 			this.undelrlyingOp = undelrlyingOp;
 			this.storeRegisterOp = storeRegisterOp;
 		}
+		public RegisterHandle(String varName, Operation undelrlyingOp, StoreRegisterOperation storeRegisterOp) {
+			this.varName = varName;
+			this.undelrlyingOp = undelrlyingOp;
+			this.storeRegisterOp = storeRegisterOp;
+		}
 
 		public int getArgsNumber() {
 			return 0;
 		}
 
 		public String getStringValue(int level) {
-			return "__reg"+registerNumber;
+			return this.varName==null ? "__reg" + registerNumber : this.varName;
 		}
+
+        public Boolean hasVarName() {
+            return varName != null;
+        }
+
+        public String getVarName() {
+            return varName;
+        }
 
 		public int getPriority() {
 			return Priority.HIGHEST;
