@@ -273,7 +273,7 @@ public class StatementBlockImpl implements StatementBlock {
 		}
 		
 		if (branchPatternClass.equals( WhilePattern.class )) {
-			Operation op = new WhileOperation(stack, statements, ((WhilePattern)branchPattern).getActions(), context);
+			Operation op = new WhileOperation(stack,((WhilePattern)branchPattern).getActions(),context);
 			addStatement(op);
 			return;
 		}
