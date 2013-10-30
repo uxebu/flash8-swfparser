@@ -52,19 +52,29 @@ public class NotOperation extends UnaryOperation implements BooleanOperation {
 	}
 
 	public String getStringValue(int level) {
-		if (op instanceof BooleanOperation) {
-			return ((BooleanOperation)op).getInvertedOperation().getStringValue(level);
+        if (op instanceof BooleanOperation) {
+            // Don't make `!b && !c)` out of `!(b || c)`.
+            // Don't use And/OrOperation for getInvertedOperation().
+            if (op instanceof AndOperation || op instanceof OrOperation) {
+                return getString(level);
+            } else {
+			    return ((BooleanOperation)op).getInvertedOperation().getStringValue(level);
+            }
 		} else {
-			if (op.getPriority() > getPriority()) {
-				return "!("+op.getStringValue(level)+")";
-			} else {
-				return "!"+op.getStringValue(level);
-			}
-		}
+            return getString(level);
+        }
 //		return (op instanceof NotOperation) ? 
 //				((NotOperation)op).getInvertedStringValue(level):
 //				"!"+op.getStringValue(level);
 	}
+
+    private String getString(int level) {
+        if (op.getPriority() > getPriority()) {
+            return "!("+op.getStringValue(level)+")";
+        } else {
+            return "!"+op.getStringValue(level);
+        }
+    }
 
 //	public String getInvertedStringValue(int level) {
 //		
