@@ -108,6 +108,9 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
             if (leftHandVariable.equals(val)) {
                 // Don't render 'var __reg0 = __reg0;'
                 return "";
+//            } else if (val.equals("undefined")) {
+//                // Don't render `var __regX = undefined;`, just `var __regX`;
+//                return "var " + leftHandVariable; render anything at all????
             } else {
                 return CodeUtil.getIndent(level) + "var " + leftHandVariable + " = " + val;
             }
