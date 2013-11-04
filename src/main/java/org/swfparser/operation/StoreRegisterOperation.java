@@ -59,7 +59,13 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
         } else {
 		    this.registerHandle = new RegisterHandle(this.registerNumber, op, this);
         }
-        if (op instanceof NewMethodOperation) {
+
+        // If we modify the function parameter, keep using it, instead of the entire expression in subsequent uses.
+        // E.g.    `trace((t = t / 2) * t);`  becomes   `t = t / 2; trace(t * t);`
+        // instead of  `t = t / 2; trace((t / 2) * t);`   which it would without adding this check to the following IF.
+        Boolean storesValueBackInFunctionParameter = this.registerHandle.hasVarName();
+
+        if (op instanceof NewMethodOperation || storesValueBackInFunctionParameter) {
             // Don't duplicate `x = new Class()` but use only the register from now on, it used to render the following:
             // `__regX = new Class()` and in a subsequent use if would again use `new Class()` instead of `__regX`.
             // Fixed this hereby.
