@@ -9,6 +9,7 @@ package org.swfparser.operation;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.log4j.Logger;
@@ -58,6 +59,15 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
         } else {
 		    this.registerHandle = new RegisterHandle(this.registerNumber, op, this);
         }
+        if (op instanceof NewMethodOperation) {
+            // Don't duplicate `x = new Class()` but use only the register from now on, it used to render the following:
+            // `__regX = new Class()` and in a subsequent use if would again use `new Class()` instead of `__regX`.
+            // Fixed this hereby.
+            // TODO might also make sense for CallFunc/Method and maybe everything stored in a register ...
+            Stack<Operation> execStack = context.getExecStack();
+            execStack.pop();
+            execStack.push(this.registerHandle);
+        }
         registers.set(this.registerNumber, this.registerHandle);
 		String regInfo="REGS:";
 		int i = 1;
@@ -67,7 +77,7 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 		logger.debug(regInfo);
 		
 		handleIncrementDecrement();
-		
+
 		// If operation under Enumerate/Enumerate2 and NullStackValue is assigned to register, 
 		// set this RegisterHandle as variable in for..in statement and skip this statement.
 		if (!context.getOperationStack().isEmpty() 
