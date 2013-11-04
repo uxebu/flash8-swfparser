@@ -416,7 +416,8 @@ public class PatternAnalyzerEx {
 					if (jmpAction.getOffset() > lastAction.getOffset()) {
 						// PATTERN: BREAK
 						logger.debug("Setting "+action.getLabel()+" to BREAK");
-						context.getPatterns().put(action.getLabel(), new BreakPattern());
+//						context.getPatterns().put(action.getLabel(), new BreakPattern());
+						context.getPatterns().put(action.getLabel(), new ContinuePattern());
 					}
 					
 				}
