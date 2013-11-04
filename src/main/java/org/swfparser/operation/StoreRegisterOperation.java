@@ -43,7 +43,7 @@ public class StoreRegisterOperation extends UnaryOperation  implements Operation
 		logger.debug("Adding register " + this.registerNumber + " = " + op);
         List<Operation> registers = context.getRegisters();
         Operation registerOperation = null;
-        if (registers.size() > this.registerNumber) { // Obviously List is like a sparse array, if index 1 is set the size is 2.
+        if (registers.size() > this.registerNumber) { // Obviously `List registers` is like a sparse array, if index 1 is set the size is 2.
             registerOperation = registers.get(this.registerNumber);
         }
         if (registerOperation instanceof FunctionParameterOperation) {
