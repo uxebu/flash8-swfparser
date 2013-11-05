@@ -145,7 +145,7 @@ public class DefineFunction2Operation extends AbstractCompoundOperation {
 		}
 
 
-        List<String> params = new ArrayList<>();
+        List<String> params = new ArrayList<String>();
         for (RegisterParam param: thisFunction.getParameters()) {
             params.add(param.getParamName());
         }

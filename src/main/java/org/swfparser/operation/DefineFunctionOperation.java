@@ -88,7 +88,7 @@ public class DefineFunctionOperation extends AbstractCompoundOperation {
 			.append("function");
 		}
 
-        List<String> params = new ArrayList<>();
+        List<String> params = new ArrayList<String>();
         for (String param: defineFunction.getParameters()) {
             params.add(param);
         }

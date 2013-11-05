@@ -985,7 +985,7 @@ public class StatementBlockImpl implements StatementBlock {
 		statement = getRealStatement(statement);
 		
 		// get all operations except stack top
-		List<Operation> allStackOperations = new ArrayList<>();
+		List<Operation> allStackOperations = new ArrayList<Operation>();
 				
 		if (!stack.isEmpty()) {
 			for (int i = 0; i<stack.size()-1; i++) {

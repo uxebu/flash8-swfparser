@@ -140,7 +140,7 @@ final class ProgressDialog {
         new Object[] { messageLabel, noteLabel, myBar });
     myDialog   = pane.createDialog(myParentComponent, myTitle);
     myDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    myDialog.show();
+    //myDialog.show();
   }
 
   private class ProgressOptionPane extends JOptionPane {
